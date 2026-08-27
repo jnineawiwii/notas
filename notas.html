@@ -1,0 +1,2017 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTP - Gestor de Notas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   <style>
+        /* ===== VARIABLES DE COLOR (MODO CLARO) ===== */
+        :root {
+            --guinda: #9D2148;
+            --guinda-light: #f5e6ec;
+            --guinda-soft: #f0e0e6;
+            --dorado: #B28E5C;
+            --dorado-light: #f5ede0;
+            --verde-rtp: #78BE20;
+            --verde-light: #eef5e0;
+            --gris: #55585A;
+            --gris-light: #f0f1f1;
+            --negro: #2D2A26;
+            --blanco: #ffffff;
+            --fondo: #f0f2f6;
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --texto: #2D2A26;
+            --texto-secundario: #55585A;
+            --borde: #e2e8f0;
+            --sombra: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --hover-bg: rgba(157, 33, 72, 0.06);
+            --scrollbar-thumb: linear-gradient(135deg, #9D2148, #B28E5C);
+            --estadistica-primary: #9D2148;
+            --estadistica-success: #78BE20;
+            --estadistica-warning: #B28E5C;
+            --estadistica-danger: #E5074C;
+            --estadistica-info: #266cb4;
+            --nota-card-bg: #FFFDF5;
+            --nota-card-border: #B28E5C;
+            --input-border: #e2e8f0;
+            --input-focus: #9D2148;
+            --upload-bg: #FFFDF5;
+            --upload-border: #B28E5C;
+            --upload-hover-bg: #F5EDE0;
+            --filter-bg: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            --filter-border: #e2e8f0;
+            --tab-inactive: #64748b;
+            --tab-active-bg: #9D2148;
+            --tab-hover-bg: rgba(157, 33, 72, 0.06);
+            --fila-editando: #FFFDF5;
+            --fila-guardada: #eef5e0;
+            --badge-nuevo: #78BE20;
+            --badge-nota: #B28E5C;
+            --progress-bg: #e2e8f0;
+            --progress-fill: linear-gradient(90deg, #9D2148, #B28E5C, #78BE20);
+            --debug-bg: #1e1e2f;
+            --debug-text: #a6e22e;
+            --raw-text-bg: #f8fafc;
+            --text-muted: #64748b;
+            --btn-shadow: rgba(157, 33, 72, 0.3);
+            --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --nav-border: #e2e8f0;
+            --scrollbar-track: #f1f5f9;
+            --metric-bg: #ffffff;
+            --metric-border: #f1f5f9;
+            --chart-bg: #ffffff;
+            --chart-border: #f1f5f9;
+            --stat-bg: #ffffff;
+            --stat-border: #f1f5f9;
+            --btn-primary-bg: #9D2148;
+            --btn-primary-hover: #7A1A3A;
+            --btn-success-bg: #78BE20;
+            --btn-success-hover: #5F9A18;
+            --btn-info-bg: #266cb4;
+            --btn-info-hover: #1A4F8A;
+            --btn-secondary-bg: #55585A;
+            --btn-secondary-hover: #3D3F40;
+            --btn-danger-bg: #E5074C;
+            --btn-danger-hover: #B8053D;
+            --btn-warning-bg: #B28E5C;
+            --btn-warning-hover: #8F6F48;
+        }
+
+        /* ===== MODO OSCURO ===== */
+        [data-theme="dark"] {
+            --fondo: #1a1a2e;
+            --card-bg: rgba(30, 30, 50, 0.92);
+            --texto: #e8e8e8;
+            --texto-secundario: #b0b0b0;
+            --borde: #3d3d5c;
+            --sombra: 0 8px 30px rgba(0, 0, 0, 0.4);
+            --hover-bg: rgba(157, 33, 72, 0.2);
+            --scrollbar-track: #2d2d44;
+            --estadistica-primary: #D45A8A;
+            --estadistica-success: #8CD44A;
+            --estadistica-warning: #D4B06A;
+            --estadistica-danger: #F5487A;
+            --estadistica-info: #5A8CD4;
+            --nota-card-bg: #252540;
+            --nota-card-border: #B28E5C;
+            --input-border: #3d3d5c;
+            --input-focus: #D45A8A;
+            --upload-bg: #252540;
+            --upload-border: #B28E5C;
+            --upload-hover-bg: #333355;
+            --filter-bg: linear-gradient(135deg, #252540, #1a1a2e);
+            --filter-border: #3d3d5c;
+            --tab-inactive: #8888aa;
+            --tab-active-bg: #9D2148;
+            --tab-hover-bg: rgba(157, 33, 72, 0.2);
+            --fila-editando: #2a2a4a;
+            --fila-guardada: #1a3a2a;
+            --badge-nuevo: #78BE20;
+            --badge-nota: #B28E5C;
+            --progress-bg: #3d3d5c;
+            --progress-fill: linear-gradient(90deg, #D45A8A, #D4B06A, #8CD44A);
+            --debug-bg: #0d0d1a;
+            --debug-text: #a6e22e;
+            --raw-text-bg: #1a1a2e;
+            --text-muted: #8888aa;
+            --btn-shadow: rgba(157, 33, 72, 0.3);
+            --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            --nav-border: #3d3d5c;
+            --scrollbar-track: #2d2d44;
+            --scrollbar-thumb: linear-gradient(135deg, #D45A8A, #D4B06A);
+            --metric-bg: #252540;
+            --metric-border: #3d3d5c;
+            --chart-bg: #252540;
+            --chart-border: #3d3d5c;
+            --stat-bg: #252540;
+            --stat-border: #3d3d5c;
+            --btn-primary-bg: #9D2148;
+            --btn-primary-hover: #7A1A3A;
+            --btn-success-bg: #78BE20;
+            --btn-success-hover: #5F9A18;
+            --btn-info-bg: #266cb4;
+            --btn-info-hover: #1A4F8A;
+            --btn-secondary-bg: #55585A;
+            --btn-secondary-hover: #3D3F40;
+            --btn-danger-bg: #E5074C;
+            --btn-danger-hover: #B8053D;
+            --btn-warning-bg: #B28E5C;
+            --btn-warning-hover: #8F6F48;
+        }
+
+        /* ===== ESTILOS PRINCIPALES ===== */
+        body {
+            background: var(--fondo);
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            padding: 20px;
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+            color: var(--texto);
+        }
+
+        .card {
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 24px;
+            border: none;
+            backdrop-filter: blur(10px);
+            background: var(--card-bg);
+            transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            border-radius: 16px 16px 0 0 !important;
+            font-weight: 700;
+            background: var(--guinda) !important;
+            color: white;
+            padding: 16px 24px;
+            letter-spacing: 0.3px;
+            border-bottom: 3px solid var(--dorado);
+            transition: background 0.3s ease;
+        }
+        .card-header .badge {
+            background: rgba(255, 255, 255, 0.25) !important;
+            color: #fff;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+        }
+
+        /* ===== TÍTULO PRINCIPAL ===== */
+        .display-4 {
+            font-weight: 800;
+            color: var(--guinda);
+            -webkit-text-fill-color: var(--guinda);
+            letter-spacing: -0.5px;
+            transition: color 0.3s ease;
+        }
+        .display-4 small {
+            -webkit-text-fill-color: var(--texto-secundario);
+            color: var(--texto-secundario);
+            background: none;
+            font-weight: 400;
+            letter-spacing: 0px;
+        }
+
+        /* ===== PESTAÑAS ===== */
+        .nav-tabs {
+            border-bottom: 3px solid var(--nav-border);
+            gap: 4px;
+            transition: border-color 0.3s ease;
+        }
+        .nav-tabs .nav-link {
+            border: none;
+            border-radius: 30px 30px 0 0;
+            padding: 14px 28px;
+            font-weight: 700;
+            color: var(--tab-inactive);
+            transition: all 0.3s ease;
+            background: transparent;
+            font-size: 0.95rem;
+        }
+        .nav-tabs .nav-link:hover {
+            color: var(--texto);
+            background: var(--tab-hover-bg);
+        }
+        .nav-tabs .nav-link.active {
+            background: var(--tab-active-bg) !important;
+            color: white;
+            box-shadow: 0 4px 20px rgba(157, 33, 72, 0.3);
+        }
+        .nav-tabs .nav-link .badge {
+            margin-left: 8px;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+        }
+        .nav-tabs .nav-link.active .badge {
+            background: rgba(255, 255, 255, 0.25) !important;
+            color: white;
+        }
+
+        .tab-content { padding-top: 15px; }
+
+        /* ===== ÁREA DE SUBIDA ===== */
+        .upload-area {
+            border: 3px dashed var(--upload-border);
+            border-radius: 20px;
+            padding: 50px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--upload-bg);
+            color: var(--texto);
+        }
+        .upload-area:hover {
+            background: var(--upload-hover-bg);
+            border-color: var(--guinda);
+            transform: scale(1.01);
+            box-shadow: 0 0 30px rgba(157, 33, 72, 0.15);
+        }
+        .upload-area.dragover {
+            background: var(--upload-hover-bg);
+            border-color: var(--guinda);
+            transform: scale(1.02);
+        }
+        .upload-area i { color: var(--guinda); }
+
+        /* ===== TABLA MEJORADA - ACCESIBLE ===== */
+        .table-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--borde);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Contenedor de scroll mejorado */
+        .scroll-horizontal {
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 600px;
+            border-radius: 12px;
+            border: 1px solid var(--borde);
+            transition: border-color 0.3s ease;
+            position: relative;
+        }
+
+        /* Scrollbar más ancha y visible */
+        .scroll-horizontal::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        .scroll-horizontal::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+            border-radius: 10px;
+        }
+        .scroll-horizontal::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 10px;
+            border: 2px solid var(--scrollbar-track);
+        }
+        .scroll-horizontal::-webkit-scrollbar-thumb:hover {
+            background: var(--guinda);
+        }
+
+        /* Tabla - diseño mejorado */
+        .table-container .table {
+            font-size: 0.85rem;
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            min-width: 1800px;
+        }
+
+        /* Encabezados - más altos y legibles */
+        .table-container .table th {
+            background: var(--guinda) !important;
+            color: white;
+            font-weight: 700;
+            padding: 14px 10px;
+            border: none;
+            border-bottom: 3px solid var(--dorado);
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            min-height: 50px;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        /* Filas - más altas */
+        .table-container .table td {
+            padding: 10px 8px;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--borde);
+            min-height: 50px;
+            background: var(--card-bg);
+            transition: background 0.2s ease;
+        }
+
+        /* Filas alternadas */
+        .table-container .table tbody tr:nth-child(even) td {
+            background: rgba(157, 33, 72, 0.03);
+        }
+
+        [data-theme="dark"] .table-container .table tbody tr:nth-child(even) td {
+            background: rgba(157, 33, 72, 0.08);
+        }
+
+        /* Hover en filas */
+        .table-container .table tbody tr:hover td {
+            background: var(--hover-bg) !important;
+        }
+
+        /* ===== CAMPOS EDITABLES MEJORADOS ===== */
+        .table-editable input,
+        .table-editable textarea,
+        .table-editable select {
+            width: 100%;
+            border: 2px solid var(--input-border);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 0.8rem;
+            background: var(--blanco);
+            color: var(--texto);
+            transition: all 0.2s ease;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            min-height: 38px;
+        }
+
+        [data-theme="dark"] .table-editable input,
+        [data-theme="dark"] .table-editable textarea,
+        [data-theme="dark"] .table-editable select {
+            background: #2d2d44;
+            color: #e8e8e8;
+        }
+
+        /* Textareas más grandes y redimensionables */
+        .table-editable textarea {
+            resize: vertical;
+            min-height: 45px;
+            max-height: 120px;
+            line-height: 1.4;
+        }
+
+        /* Campos de texto - mejor visibilidad */
+        .table-editable input {
+            min-height: 38px;
+            line-height: 1.4;
+        }
+
+        /* Selects mejorados */
+        .table-editable select {
+            min-height: 38px;
+            cursor: pointer;
+            appearance: auto;
+            padding-right: 28px;
+        }
+
+        /* Focus - más visible */
+        .table-editable input:focus,
+        .table-editable textarea:focus,
+        .table-editable select:focus {
+            border-color: var(--input-focus);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(157, 33, 72, 0.15);
+            background: var(--blanco);
+        }
+
+        [data-theme="dark"] .table-editable input:focus,
+        [data-theme="dark"] .table-editable textarea:focus,
+        [data-theme="dark"] .table-editable select:focus {
+            background: #333355;
+        }
+
+        /* ===== BOTONES DE ACCIÓN MEJORADOS ===== */
+        .btn-accion {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            border-radius: 30px;
+            margin: 0 3px;
+            min-width: 36px;
+            min-height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease;
+        }
+
+        .btn-accion i {
+            font-size: 0.9rem;
+        }
+
+        .btn-accion:hover {
+            transform: scale(1.08);
+        }
+
+        /* Columna de acciones - fija */
+        .table-container .table td:last-child {
+            min-width: 100px;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        /* ===== FILAS DE ESTADO ===== */
+        .fila-editando td {
+            background: var(--fila-editando) !important;
+            border-left: 4px solid var(--dorado);
+        }
+
+        .fila-editando td:first-child {
+            border-left: 4px solid var(--dorado);
+        }
+
+        .fila-guardada td {
+            background: var(--fila-guardada) !important;
+            border-left: 4px solid var(--verde-rtp);
+        }
+
+        .fila-guardada td:first-child {
+            border-left: 4px solid var(--verde-rtp);
+        }
+
+        /* ===== ANCHOS MÍNIMOS DE COLUMNAS ===== */
+        .table-container .table th:nth-child(1) { min-width: 40px; max-width: 50px; }
+        .table-container .table th:nth-child(2) { min-width: 60px; max-width: 80px; }
+        .table-container .table th:nth-child(3) { min-width: 80px; max-width: 100px; }
+        .table-container .table th:nth-child(4) { min-width: 100px; max-width: 120px; }
+        .table-container .table th:nth-child(5) { min-width: 200px; max-width: 300px; }
+        .table-container .table th:nth-child(6) { min-width: 70px; max-width: 90px; }
+        .table-container .table th:nth-child(7) { min-width: 150px; max-width: 220px; }
+        .table-container .table th:nth-child(8) { min-width: 120px; max-width: 180px; }
+        .table-container .table th:nth-child(9) { min-width: 120px; max-width: 180px; }
+        .table-container .table th:nth-child(10) { min-width: 120px; max-width: 180px; }
+        .table-container .table th:nth-child(11) { min-width: 120px; max-width: 180px; }
+        .table-container .table th:nth-child(12) { min-width: 120px; max-width: 180px; }
+        .table-container .table th:nth-child(13) { min-width: 120px; max-width: 180px; }
+        .table-container .table th:nth-child(14) { min-width: 100px; max-width: 130px; }
+        .table-container .table th:nth-child(15) { min-width: 180px; max-width: 300px; }
+        .table-container .table th:nth-child(16) { min-width: 120px; max-width: 180px; }
+        .table-container .table th:nth-child(17) { min-width: 80px; max-width: 100px; }
+        .table-container .table th:nth-child(18) { min-width: 250px; max-width: 400px; }
+        .table-container .table th:nth-child(19) { min-width: 100px; max-width: 120px; }
+
+        /* ===== TOOLTIP PARA CAMPOS LARGOS ===== */
+        .table-editable input[title]:hover,
+        .table-editable textarea[title]:hover {
+            position: relative;
+        }
+
+        .table-editable input[title]:hover::after,
+        .table-editable textarea[title]:hover::after {
+            content: attr(title);
+            position: absolute;
+            bottom: 110%;
+            left: 0;
+            background: var(--negro);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            white-space: normal;
+            max-width: 400px;
+            z-index: 1000;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            word-wrap: break-word;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            .table-container .table { font-size: 0.75rem; min-width: 1400px; }
+            .table-container .table th, .table-container .table td { padding: 6px 4px; }
+        }
+
+        @media (max-width: 768px) {
+            .table-container .table { font-size: 0.7rem; min-width: 1200px; }
+            .table-container .table th, .table-container .table td { padding: 4px 3px; }
+            .table-editable input, .table-editable textarea, .table-editable select { font-size: 0.7rem; padding: 4px 6px; min-height: 30px; }
+            .btn-accion { padding: 4px 8px; font-size: 0.7rem; min-width: 30px; min-height: 30px; }
+        }
+
+        /* ===== SELECTORES DE TAMAÑO DE FUENTE ===== */
+        .font-size-sm .table-container .table { font-size: 0.75rem; }
+        .font-size-md .table-container .table { font-size: 0.85rem; }
+        .font-size-lg .table-container .table { font-size: 0.95rem; }
+        
+        /* ===== BOTONES ===== */
+        .btn { border-radius: 30px; font-weight: 600; padding: 8px 20px; font-size: 0.85rem; transition: all 0.25s ease; letter-spacing: 0.2px; }
+        .btn-primary { background: var(--btn-primary-bg) !important; border: none; color: white; box-shadow: 0 4px 16px var(--btn-shadow); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px var(--btn-shadow); background: var(--btn-primary-hover) !important; }
+        .btn-success { background: var(--btn-success-bg) !important; border: none; box-shadow: 0 4px 16px rgba(120, 190, 32, 0.3); color: white; }
+        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(120, 190, 32, 0.4); background: var(--btn-success-hover) !important; color: white; }
+        .btn-info { background: var(--btn-info-bg) !important; border: none; color: white; }
+        .btn-info:hover { transform: translateY(-2px); background: var(--btn-info-hover) !important; }
+        .btn-secondary { background: var(--btn-secondary-bg) !important; border: none; color: white; }
+        .btn-secondary:hover { transform: translateY(-2px); background: var(--btn-secondary-hover) !important; }
+        .btn-danger { background: var(--btn-danger-bg) !important; border: none; color: white; }
+        .btn-danger:hover { transform: translateY(-2px); background: var(--btn-danger-hover) !important; }
+        .btn-warning { background: var(--btn-warning-bg) !important; border: none; color: white; }
+        .btn-warning:hover { transform: translateY(-2px); background: var(--btn-warning-hover) !important; }
+        .btn-outline-secondary { border-color: var(--borde); color: var(--texto); }
+        .btn-outline-secondary:hover { background: var(--hover-bg); border-color: var(--guinda); }
+
+        /* ===== FILTROS ===== */
+        .filter-section {
+            background: var(--filter-bg);
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            border: 1px solid var(--filter-border);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .filter-section .form-control, .filter-section .form-select {
+            border-radius: 30px;
+            border: 2px solid var(--input-border);
+            padding: 8px 16px;
+            transition: all 0.2s ease;
+            background: var(--blanco);
+            color: var(--texto);
+        }
+        [data-theme="dark"] .filter-section .form-control,
+        [data-theme="dark"] .filter-section .form-select {
+            background: #2d2d44;
+            color: #e8e8e8;
+        }
+        .filter-section .form-control:focus, .filter-section .form-select:focus {
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 4px rgba(157, 33, 72, 0.12);
+        }
+        .filter-section .form-label { color: var(--texto); }
+
+        /* ===== ESTADÍSTICAS ===== */
+        .stat-card {
+            background: var(--stat-bg);
+            border-radius: 14px;
+            padding: 18px 12px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--stat-border);
+            transition: all 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+        }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); }
+        .stat-card .number { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; }
+        .stat-card .label { color: var(--text-muted); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-card.primary .number { color: var(--estadistica-primary); -webkit-text-fill-color: var(--estadistica-primary); }
+        .stat-card.success .number { color: var(--estadistica-success); -webkit-text-fill-color: var(--estadistica-success); }
+        .stat-card.warning .number { color: var(--estadistica-warning); -webkit-text-fill-color: var(--estadistica-warning); }
+        .stat-card.danger .number { color: var(--estadistica-danger); -webkit-text-fill-color: var(--estadistica-danger); }
+        .stat-card.info .number { color: var(--estadistica-info); -webkit-text-fill-color: var(--estadistica-info); }
+
+        /* ===== DASHBOARD ===== */
+        .chart-container {
+            background: var(--chart-bg);
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--chart-border);
+            height: 100%;
+            min-height: 300px;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .chart-container canvas { max-height: 280px; max-width: 100%; }
+
+        .metric-card {
+            background: var(--metric-bg);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--metric-border);
+            transition: all 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+            height: 100%;
+        }
+        .metric-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); }
+        .metric-card .icon { font-size: 2.5rem; margin-bottom: 8px; }
+        .metric-card .value { font-size: 2rem; font-weight: 800; }
+        .metric-card .label { color: var(--text-muted); font-size: 0.85rem; font-weight: 600; }
+
+        .metric-card .value.text-primary { color: var(--estadistica-primary); }
+        .metric-card .value.text-success { color: var(--estadistica-success); }
+        .metric-card .value.text-warning { color: var(--estadistica-warning); }
+        .metric-card .value.text-info { color: var(--estadistica-info); }
+
+        /* ===== BADGES ===== */
+        .badge-nota {
+            background: var(--badge-nota);
+            color: white;
+            padding: 5px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 2px 12px rgba(178, 142, 92, 0.3);
+        }
+        .badge-nuevo {
+            background: var(--badge-nuevo);
+            color: white;
+            font-size: 0.6rem;
+            padding: 3px 10px;
+            border-radius: 30px;
+            margin-left: 6px;
+            font-weight: 700;
+            text-transform: uppercase;
+            box-shadow: 0 2px 8px rgba(120, 190, 32, 0.3);
+        }
+
+        /* ===== EXTRAS ===== */
+        .extracted-text {
+            background: var(--raw-text-bg);
+            padding: 16px;
+            border-radius: 12px;
+            max-height: 350px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            border: 1px solid var(--borde);
+            color: var(--texto);
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        .nota-card {
+            border-left: 5px solid var(--nota-card-border);
+            padding: 14px 18px;
+            margin-bottom: 12px;
+            background: var(--nota-card-bg);
+            border-radius: 10px;
+            transition: all 0.2s ease, background 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            color: var(--texto);
+        }
+        .nota-card:hover { transform: translateX(4px); box-shadow: 0 4px 16px rgba(178, 142, 92, 0.2); }
+        .nota-card .titulo { font-weight: 700; font-size: 1.05em; color: var(--guinda); transition: color 0.3s ease; }
+        .nota-card .resumen { color: var(--texto-secundario); margin: 6px 0; font-style: italic; font-weight: 400; }
+        .nota-card .link { color: var(--estadistica-info); font-size: 0.85em; font-weight: 500; }
+        .nota-card .medios { color: var(--negro); font-weight: 600; font-size: 0.85em; }
+        [data-theme="dark"] .nota-card .medios { color: #d0d0d0; }
+
+        .progress-bar-custom {
+            height: 8px;
+            background: var(--progress-bg);
+            border-radius: 10px;
+            margin: 14px 0;
+            overflow: hidden;
+            transition: background 0.3s ease;
+        }
+        .progress-bar-custom .fill {
+            height: 100%;
+            background: var(--progress-fill);
+            border-radius: 10px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+            width: 0%;
+        }
+
+        .debug-box {
+            background: var(--debug-bg);
+            color: var(--debug-text);
+            padding: 15px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin-top: 12px;
+            transition: background 0.3s ease;
+        }
+        .raw-text-box {
+            background: var(--raw-text-bg);
+            padding: 12px;
+            border-radius: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            white-space: pre-wrap;
+            border: 1px solid var(--borde);
+            margin-top: 10px;
+            color: var(--texto);
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            body { padding: 12px; }
+            .nav-tabs .nav-link { padding: 10px 16px; font-size: 0.8rem; }
+            .display-4 { font-size: 2rem; }
+            .stat-card .number { font-size: 1.6rem; }
+            .chart-container { min-height: 250px; }
+        }
+
+        /* ===== BOTÓN DE MODO OSCURO ===== */
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            background: var(--guinda);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 20px rgba(157, 33, 72, 0.4);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 8px 32px rgba(157, 33, 72, 0.5);
+        }
+
+        /* ===== SECCIÓN DE AJUSTES ===== */
+        .settings-section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px 24px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--borde);
+            margin-bottom: 20px;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .settings-section .settings-title {
+            font-weight: 700;
+            color: var(--guinda);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+        .settings-section .settings-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .settings-section .settings-row .form-label { margin: 0; font-weight: 500; color: var(--texto); }
+        .settings-section .form-check-input {
+            width: 48px;
+            height: 24px;
+            border-radius: 30px;
+            background-color: var(--borde);
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: relative;
+        }
+        .settings-section .form-check-input:checked { background-color: var(--guinda); }
+        .settings-section .form-check-input:focus { box-shadow: 0 0 0 3px rgba(157, 33, 72, 0.25); }
+        .settings-section .form-check-label { color: var(--texto); font-weight: 500; }
+        .settings-section .theme-icon { font-size: 1.2rem; }
+        .settings-section .divider { width: 100%; height: 1px; background: var(--borde); margin: 12px 0; }
+        .settings-section .color-preview { display: flex; gap: 8px; flex-wrap: wrap; }
+        .settings-section .color-dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--borde);
+            transition: transform 0.2s ease;
+            cursor: pointer;
+        }
+        .settings-section .color-dot:hover { transform: scale(1.15); }
+        .settings-section .color-label { font-size: 0.75rem; color: var(--texto-secundario); margin-top: 4px; text-align: center; }
+        .settings-section .color-item { display: flex; flex-direction: column; align-items: center; }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <!-- TÍTULO -->
+    <div class="text-center mb-4">
+        <h1 class="display-4">
+            <i class="fas fa-robot" style="color: var(--guinda);"></i> RTP - Gestor de Notas
+            <small class="d-block text-muted fs-6">Extrae, edita, guarda y consulta tus notas</small>
+        </h1>
+    </div>
+
+    <!-- PESTAÑAS -->
+    <ul class="nav nav-tabs nav-fill mb-4" id="mainTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab-editor" data-bs-toggle="tab" data-bs-target="#editorPanel" type="button" role="tab">
+                <i class="fas fa-edit"></i> Editor <span class="badge bg-success" id="nuevasCount">0</span>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-consulta" data-bs-toggle="tab" data-bs-target="#consultaPanel" type="button" role="tab">
+                <i class="fas fa-search"></i> Consulta <span class="badge bg-secondary" id="totalBDCount">0</span>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-dashboard" data-bs-toggle="tab" data-bs-target="#dashboardPanel" type="button" role="tab">
+                <i class="fas fa-chart-pie"></i> Dashboard
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="mainTabContent">
+
+        <!-- ============================================================ -->
+        <!-- PANEL 1: EDITOR -->
+        <!-- ============================================================ -->
+        <div class="tab-pane fade show active" id="editorPanel" role="tabpanel">
+            <!-- SECCIÓN DE AJUSTES -->
+            <div class="settings-section">
+                <div class="settings-title"><i class="fas fa-cog"></i> Ajustes de visualización</div>
+                <div class="settings-row">
+                    <span class="theme-icon"><i class="fas fa-sun"></i></span>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="themeToggle">
+                        <label class="form-check-label" for="themeToggle">Modo oscuro</label>
+                    </div>
+                    <span class="theme-icon"><i class="fas fa-moon"></i></span>
+                    <span class="text-muted ms-2" style="font-size:0.85rem;">Activa el modo oscuro para reducir el cansancio visual</span>
+                </div>
+                <div class="divider"></div>
+                <div class="settings-row">
+                    <span><i class="fas fa-palette"></i> Colores institucionales RTP:</span>
+                    <div class="color-preview">
+                        <div class="color-item">
+                            <div class="color-dot" style="background:#9D2148;" title="Guinda RTP"></div>
+                            <span class="color-label">Guinda</span>
+                        </div>
+                        <div class="color-item">
+                            <div class="color-dot" style="background:#B28E5C;" title="Dorado RTP"></div>
+                            <span class="color-label">Dorado</span>
+                        </div>
+                        <div class="color-item">
+                            <div class="color-dot" style="background:#78BE20;" title="Verde RTP"></div>
+                            <span class="color-label">Verde RTP</span>
+                        </div>
+                        <div class="color-item">
+                            <div class="color-dot" style="background:#266cb4;" title="Azul RTP"></div>
+                            <span class="color-label">Azul</span>
+                        </div>
+                        <div class="color-item">
+                            <div class="color-dot" style="background:#55585A;" title="Gris RTP"></div>
+                            <span class="color-label">Gris</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-file-pdf"></i> Sube tu PDF
+                    <span class="badge">Solo notas nuevas</span>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="upload-area" id="dropArea">
+                                <i class="fas fa-cloud-upload-alt fa-4x text-primary"></i>
+                                <h5 class="mt-3">Arrastra tu PDF aquí</h5>
+                                <p class="text-muted">o haz clic para seleccionar</p>
+                                <input type="file" id="pdfInput" accept=".pdf" style="display:none;">
+                            </div>
+                            <div class="mt-3 d-flex flex-wrap gap-2">
+                                <button id="processPdfBtn" class="btn btn-primary" disabled><i class="fas fa-magic"></i> Analizar PDF</button>
+                                <button id="clearPdfBtn" class="btn btn-secondary"><i class="fas fa-trash"></i> Limpiar</button>
+                            </div>
+                            <div class="progress-bar-custom mt-3"><div class="fill" id="progressBar"></div></div>
+                            <button class="btn btn-outline-secondary btn-sm mt-2" type="button" data-bs-toggle="collapse" data-bs-target="#debugBox">
+                                <i class="fas fa-bug"></i> Depuración
+                            </button>
+                            <div class="collapse mt-2" id="debugBox">
+                                <div class="debug-box" id="debugContent">Esperando...</div>
+                                <div class="raw-text-box" id="rawTextContent">Texto crudo...</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><i class="fas fa-eye"></i> Notas detectadas:</h5>
+                            <div id="extractedTextDisplay" class="extracted-text">
+                                <span class="text-muted">📄 Sube un PDF</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container mt-4">
+                <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+                    <h3><i class="fas fa-table"></i> Notas nuevas</h3>
+                    <div>
+                        <span class="badge bg-success" id="recordCount">0 notas nuevas</span>
+                        <button id="addRowBtn" class="btn btn-primary ms-2"><i class="fas fa-plus"></i> Agregar fila</button>
+                        <button id="saveAllBtn" class="btn btn-success ms-2"><i class="fas fa-save"></i> Guardar todas</button>
+                        <button id="refreshTableBtn" class="btn btn-secondary ms-1"><i class="fas fa-sync"></i> Cargar BD</button>
+                    </div>
+                </div>
+                <div class="scroll-horizontal">
+                    <table class="table table-striped table-hover table-editable" id="dataTable">
+                        <thead><tr>
+                            <th>#</th><th>Año</th><th>Mes</th><th>Fecha</th><th>Título</th><th>Relevante</th>
+                            <th>Tema</th><th>Campaña</th><th>📻 Radio</th><th>📺 TV</th><th>💻 Digital</th>
+                            <th>📰 Impresos</th><th>🌐 Otros</th><th>Tipo</th><th>🔗 Link</th>
+                            <th>Autor</th><th>Boletín</th><th>Resumen</th><th>Acciones</th>
+                        </tr></thead>
+                        <tbody id="tableBody">
+                            <tr><td colspan="19" class="text-center">📄 Sube un PDF o usa "Agregar fila"</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- PANEL 2: CONSULTA -->
+        <!-- ============================================================ -->
+        <div class="tab-pane fade" id="consultaPanel" role="tabpanel">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-filter"></i> Filtros de búsqueda
+                    <span class="badge float-end" id="filteredCount">0 registros</span>
+                </div>
+                <div class="card-body">
+                    <div class="filter-section">
+                        <div class="row g-3">
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold"><i class="fas fa-calendar"></i> Año</label>
+                                <select class="form-select" id="filterYear"><option value="">Todos</option></select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold"><i class="fas fa-calendar-alt"></i> Mes</label>
+                                <select class="form-select" id="filterMonth">
+                                    <option value="">Todos</option>
+                                    <option value="Enero">Enero</option><option value="Febrero">Febrero</option>
+                                    <option value="Marzo">Marzo</option><option value="Abril">Abril</option>
+                                    <option value="Mayo">Mayo</option><option value="Junio">Junio</option>
+                                    <option value="Julio">Julio</option><option value="Agosto">Agosto</option>
+                                    <option value="Septiembre">Septiembre</option><option value="Octubre">Octubre</option>
+                                    <option value="Noviembre">Noviembre</option><option value="Diciembre">Diciembre</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold"><i class="fas fa-tag"></i> Tipo</label>
+                                <select class="form-select" id="filterType">
+                                    <option value="">Todos</option>
+                                    <option value="Informativo">📄 Informativo</option>
+                                    <option value="Positivo">✅ Positivo</option>
+                                    <option value="Negativo">❌ Negativo</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold"><i class="fas fa-check-circle"></i> Relevante</label>
+                                <select class="form-select" id="filterRelevant">
+                                    <option value="">Todos</option>
+                                    <option value="Si">Si</option><option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold"><i class="fas fa-newspaper"></i> Medio</label>
+                                <select class="form-select" id="filterMedium">
+                                    <option value="">Todos</option>
+                                    <option value="radio">📻 Radio</option>
+                                    <option value="tv">📺 TV</option>
+                                    <option value="digital">💻 Digital</option>
+                                    <option value="print">📰 Impresos</option>
+                                    <option value="others">🌐 Otros</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold"><i class="fas fa-search"></i> Buscar</label>
+                                <input type="text" class="form-control" id="filterSearch" placeholder="Buscar...">
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <button class="btn btn-primary" id="applyFiltersBtn"><i class="fas fa-filter"></i> Aplicar</button>
+                                <button class="btn btn-secondary" id="clearFiltersBtn"><i class="fas fa-undo"></i> Limpiar</button>
+                                <button class="btn btn-success" id="exportCsvBtn"><i class="fas fa-file-csv"></i> Exportar CSV</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Estadísticas -->
+                    <div class="row g-3 mb-3" id="statsRow">
+                        <div class="col-md-2"><div class="stat-card primary"><div class="number" id="statTotal">0</div><div class="label">Total notas</div></div></div>
+                        <div class="col-md-2"><div class="stat-card success"><div class="number" id="statPositivo">0</div><div class="label">✅ Positivas</div></div></div>
+                        <div class="col-md-2"><div class="stat-card danger"><div class="number" id="statNegativo">0</div><div class="label">❌ Negativas</div></div></div>
+                        <div class="col-md-2"><div class="stat-card warning"><div class="number" id="statRelevante">0</div><div class="label">⭐ Relevantes</div></div></div>
+                        <div class="col-md-2"><div class="stat-card info"><div class="number" id="statImpresos">0</div><div class="label">📰 Impresos</div></div></div>
+                        <div class="col-md-2"><div class="stat-card"><div class="number" id="statMeses">0</div><div class="label">📅 Meses</div></div></div>
+                    </div>
+
+                    <div class="table-container">
+                        <h5><i class="fas fa-list"></i> Resultados <span class="badge bg-secondary" id="resultCount">0</span></h5>
+                        <div class="scroll-horizontal">
+                            <table class="table table-striped table-hover" id="resultsTable">
+                                <thead><tr>
+                                    <th>#</th><th>Año</th><th>Mes</th><th>Fecha</th><th>Título</th>
+                                    <th>Relevante</th><th>Tema</th><th>📻 Radio</th><th>📺 TV</th>
+                                    <th>💻 Digital</th><th>📰 Impresos</th><th>🌐 Otros</th><th>Tipo</th><th>Resumen</th>
+                                </tr></thead>
+                                <tbody id="resultsBody"><tr><td colspan="14" class="text-center">Cargando...</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- PANEL 3: DASHBOARD -->
+        <!-- ============================================================ -->
+        <div class="tab-pane fade" id="dashboardPanel" role="tabpanel">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-chart-pie"></i> Dashboard de Notas
+                    <span class="badge">Estadísticas y gráficos</span>
+                </div>
+                <div class="card-body">
+                    <!-- Métricas rápidas -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-3">
+                            <div class="metric-card">
+                                <div class="icon">📰</div>
+                                <div class="value text-primary" id="dashTotal">0</div>
+                                <div class="label">Total de notas</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="metric-card">
+                                <div class="icon">📅</div>
+                                <div class="value text-success" id="dashMeses">0</div>
+                                <div class="label">Meses con datos</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="metric-card">
+                                <div class="icon">🏷️</div>
+                                <div class="value text-warning" id="dashTipos">0</div>
+                                <div class="label">Tipos diferentes</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="metric-card">
+                                <div class="icon">📻</div>
+                                <div class="value text-info" id="dashMedios">0</div>
+                                <div class="label">Medios con cobertura</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gráficos -->
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="chart-container">
+                                <h6 class="text-center fw-bold mb-3"><i class="fas fa-chart-bar"></i> Notas por mes</h6>
+                                <canvas id="chartMensual"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="chart-container">
+                                <h6 class="text-center fw-bold mb-3"><i class="fas fa-chart-pie"></i> Distribución por tipo</h6>
+                                <canvas id="chartTipos"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="chart-container">
+                                <h6 class="text-center fw-bold mb-3"><i class="fas fa-chart-pie"></i> Relevancia</h6>
+                                <canvas id="chartRelevancia"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="chart-container">
+                                <h6 class="text-center fw-bold mb-3"><i class="fas fa-chart-bar"></i> Medios de comunicación</h6>
+                                <canvas id="chartMedios"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="chart-container">
+                                <h6 class="text-center fw-bold mb-3"><i class="fas fa-chart-line"></i> Evolución mensual</h6>
+                                <canvas id="chartEvolucion"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-12 text-center">
+                            <button class="btn btn-info" id="refreshDashboardBtn"><i class="fas fa-sync"></i> Actualizar dashboard</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== BOTÓN MODO OSCURO ===== -->
+<button class="theme-toggle" id="themeToggleBtn" title="Cambiar modo oscuro/claro">
+    🌙
+</button>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+// ============================================================
+// CONFIGURACIÓN SUPABASE
+// ============================================================
+const SUPABASE_URL = 'https://jkkzrljzyncqwaghsnve.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_Ous809GaaSz9WUONNfVglg_MmTNvMeJ';
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const TABLE_NAME = 'notas_rtp';
+
+// ============================================================
+// VARIABLES GLOBALES
+// ============================================================
+let pdfFile = null;
+let notasNuevas = [];
+let todasLasNotas = [];
+let datosFiltrados = [];
+let debugLogs = [];
+let charts = {};
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// ============================================================
+// MODO OSCURO
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeToggle = document.getElementById('themeToggle');
+    
+    // Cargar preferencia guardada
+    const savedTheme = localStorage.getItem('rtp-theme');
+    if (savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        if (themeToggle) themeToggle.checked = true;
+        themeToggleBtn.textContent = '☀️';
+    }
+    
+    function toggleTheme(isDark) {
+        if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('rtp-theme', 'dark');
+            themeToggleBtn.textContent = '☀️';
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.setItem('rtp-theme', 'light');
+            themeToggleBtn.textContent = '🌙';
+        }
+    }
+    
+    themeToggleBtn.addEventListener('click', function() {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        toggleTheme(!isDark);
+        if (themeToggle) themeToggle.checked = !isDark;
+    });
+    
+    if (themeToggle) {
+        themeToggle.addEventListener('change', function() {
+            toggleTheme(this.checked);
+        });
+    }
+});
+
+// ============================================================
+// REFERENCIAS A ELEMENTOS
+// ============================================================
+const dropArea = document.getElementById('dropArea');
+const pdfInput = document.getElementById('pdfInput');
+const processPdfBtn = document.getElementById('processPdfBtn');
+const clearPdfBtn = document.getElementById('clearPdfBtn');
+const extractedTextDisplay = document.getElementById('extractedTextDisplay');
+const tableBody = document.getElementById('tableBody');
+const progressBar = document.getElementById('progressBar');
+const saveAllBtn = document.getElementById('saveAllBtn');
+const refreshTableBtn = document.getElementById('refreshTableBtn');
+const addRowBtn = document.getElementById('addRowBtn');
+const debugContent = document.getElementById('debugContent');
+const rawTextContent = document.getElementById('rawTextContent');
+
+// Filtros
+const filterYear = document.getElementById('filterYear');
+const filterMonth = document.getElementById('filterMonth');
+const filterType = document.getElementById('filterType');
+const filterRelevant = document.getElementById('filterRelevant');
+const filterMedium = document.getElementById('filterMedium');
+const filterSearch = document.getElementById('filterSearch');
+const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+const exportCsvBtn = document.getElementById('exportCsvBtn');
+const resultsBody = document.getElementById('resultsBody');
+const resultCount = document.getElementById('resultCount');
+const filteredCount = document.getElementById('filteredCount');
+const totalBDCount = document.getElementById('totalBDCount');
+const nuevasCount = document.getElementById('nuevasCount');
+
+// Estadísticas
+const statTotal = document.getElementById('statTotal');
+const statPositivo = document.getElementById('statPositivo');
+const statNegativo = document.getElementById('statNegativo');
+const statRelevante = document.getElementById('statRelevante');
+const statImpresos = document.getElementById('statImpresos');
+const statMeses = document.getElementById('statMeses');
+
+// Dashboard
+const dashTotal = document.getElementById('dashTotal');
+const dashMeses = document.getElementById('dashMeses');
+const dashTipos = document.getElementById('dashTipos');
+const dashMedios = document.getElementById('dashMedios');
+const refreshDashboardBtn = document.getElementById('refreshDashboardBtn');
+
+// ============================================================
+// DRAG & DROP
+// ============================================================
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); });
+});
+['dragenter', 'dragover'].forEach(eventName => {
+    dropArea.addEventListener(eventName, () => dropArea.classList.add('dragover'));
+});
+['dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, () => dropArea.classList.remove('dragover'));
+});
+dropArea.addEventListener('drop', function(e) {
+    const files = e.dataTransfer.files;
+    if (files.length > 0 && files[0].type === 'application/pdf') {
+        pdfFile = files[0];
+        processPdfBtn.disabled = false;
+        showFileName(files[0].name);
+    }
+});
+dropArea.addEventListener('click', () => pdfInput.click());
+pdfInput.addEventListener('change', function(e) {
+    if (this.files.length > 0) {
+        pdfFile = this.files[0];
+        processPdfBtn.disabled = false;
+        showFileName(this.files[0].name);
+    }
+});
+function showFileName(name) {
+    dropArea.innerHTML = `
+        <i class="fas fa-file-pdf fa-4x text-danger"></i>
+        <h5 class="mt-3">📄 ${name}</h5>
+        <p class="text-muted">PDF listo para analizar</p>
+    `;
+}
+
+function debug(msg) {
+    debugLogs.push(msg);
+    debugContent.textContent = debugLogs.join('\n');
+    debugContent.scrollTop = debugContent.scrollHeight;
+}
+
+// ============================================================
+// PROCESAR PDF - PARSER MEJORADO
+// ============================================================
+processPdfBtn.addEventListener('click', async function() {
+    if (!pdfFile) return;
+    debugLogs = [];
+    debug('=== INICIO DE ANÁLISIS ===');
+    extractedTextDisplay.innerHTML = '<span class="text-primary">⏳ Procesando PDF...</span>';
+    progressBar.style.width = '30%';
+    try {
+        const arrayBuffer = await pdfFile.arrayBuffer();
+        progressBar.style.width = '50%';
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let textoCompleto = '';
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            const pageText = textContent.items.map(item => item.str).join(' ');
+            textoCompleto += pageText + '\n';
+            progressBar.style.width = `${50 + (i / pdf.numPages) * 40}%`;
+        }
+        progressBar.style.width = '90%';
+        rawTextContent.textContent = textoCompleto.substring(0, 2000) + '...';
+        debug('📄 Texto extraído (' + textoCompleto.length + ' caracteres)');
+
+        const notasExtraidas = extraerNotasMejorado(textoCompleto);
+        const notasFiltradas = filtrarNotasNuevas(notasExtraidas);
+        mostrarNotasPreview(notasFiltradas);
+        agregarNotasATabla(notasFiltradas);
+        progressBar.style.width = '100%';
+        setTimeout(() => progressBar.style.width = '0%', 1000);
+        alert(`✅ ${notasExtraidas.length} notas extraídas. ${notasFiltradas.length} son nuevas.`);
+    } catch (error) {
+        alert('Error: ' + error.message);
+        progressBar.style.width = '0%';
+        debug('❌ ERROR: ' + error.message);
+    }
+});
+
+// ============================================================
+// PARSER MEJORADO - FUNCIONA CON TEXTO PEGADO
+// ============================================================
+function extraerNotasMejorado(texto) {
+    const notas = [];
+    const fechaActual = new Date();
+    const mesActual = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][fechaActual.getMonth()];
+    const añoActual = fechaActual.getFullYear().toString();
+    const fechaStr = fechaActual.toISOString().split('T')[0];
+
+    debug('🔍 Buscando notas en el texto (parser ultra)...');
+
+    // Normalizar: reemplazar múltiples espacios y saltos
+    let text = texto.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    
+    // === MÉTODO 1: Dividir por "TEMA:" (con o sin ##) ===
+    const partes = text.split(/##\s*TEMA:\s*|TEMA:\s*/i);
+    
+    debug(`📌 Se encontraron ${partes.length - 1} bloques de TEMA:`);
+    
+    for (let i = 1; i < partes.length; i++) {
+        const bloque = partes[i].trim();
+        if (!bloque) continue;
+        debug(`📦 Bloque ${i}: ${bloque.substring(0, 150)}...`);
+        const nota = extraerNotaUltra(bloque, añoActual, mesActual, fechaStr);
+        if (nota) {
+            notas.push(nota);
+            debug(`✅ Nota ${i} extraída: "${nota.title}"`);
+        }
+    }
+    
+    // === MÉTODO 2: Si no se encontraron notas, buscar por "Resumen:" ===
+    if (notas.length === 0) {
+        debug('⚠️ No se encontraron TEMA:, buscando por "Resumen:"...');
+        const partesResumen = text.split(/Resumen:\s*/i);
+        for (let i = 1; i < partesResumen.length; i++) {
+            const bloque = partesResumen[i].trim();
+            if (bloque && bloque.length > 20) {
+                const nota = extraerNotaUltra('TEMA: Nota ' + i + ' ' + bloque, añoActual, mesActual, fechaStr);
+                if (nota) notas.push(nota);
+            }
+        }
+    }
+    
+    // === MÉTODO 3: Si aún no hay notas, buscar por "MEDIOS:" ===
+    if (notas.length === 0) {
+        debug('⚠️ Buscando por "MEDIOS:"...');
+        const partesMedios = text.split(/MEDIOS:\s*/i);
+        for (let i = 1; i < partesMedios.length; i++) {
+            const bloque = partesMedios[i].trim();
+            if (bloque && bloque.length > 20) {
+                const nota = extraerNotaUltra('TEMA: Nota ' + i + ' ' + bloque, añoActual, mesActual, fechaStr);
+                if (nota) notas.push(nota);
+            }
+        }
+    }
+    
+    debug(`📊 Total notas extraídas: ${notas.length}`);
+    return notas;
+}
+
+function extraerNotaUltra(bloque, añoActual, mesActual, fechaStr) {
+    let titulo = '';
+    let resumen = '';
+    let link = '';
+    let medios = '';
+    let tema = '';
+    
+    // === PASO 1: Buscar "Resumen:" ===
+    const resumenRegex = /Resumen:\s*([^]*?)(?=(?:MEDIOS:|TEMA:|https?:\/\/|$))/i;
+    const resumenMatch = bloque.match(resumenRegex);
+    if (resumenMatch) {
+        resumen = resumenMatch[1].trim();
+        resumen = resumen.replace(/^[^a-zA-Záéíóúüñ]+/, '').trim();
+        debug(`📄 Resumen: "${resumen.substring(0, 80)}..."`);
+        bloque = bloque.replace(resumenMatch[0], '');
+    } else {
+        const puntoMayusRegex = /\.\s*([A-ZÁÉÍÓÚÜÑ][^.]*\.)/;
+        const puntoMatch = bloque.match(puntoMayusRegex);
+        if (puntoMatch && !puntoMatch[1].includes('MEDIOS') && !puntoMatch[1].includes('http')) {
+            resumen = puntoMatch[1].trim();
+            debug(`📄 Resumen (por punto): "${resumen.substring(0, 80)}..."`);
+            bloque = bloque.replace(puntoMatch[0], '');
+        }
+    }
+    
+    // === PASO 2: Buscar link (http:// o https://) ===
+    const linkRegex = /https?:\/\/[^\s]+/;
+    const linkMatch = bloque.match(linkRegex);
+    if (linkMatch) {
+        link = linkMatch[0].trim();
+        debug(`🔗 Link: ${link}`);
+        bloque = bloque.replace(link, '');
+    }
+    
+    // === PASO 3: Buscar "MEDIOS:" ===
+    const mediosRegex = /MEDIOS:\s*([^]*?)(?=(?:TEMA:|Resumen:|$))/i;
+    const mediosMatch = bloque.match(mediosRegex);
+    if (mediosMatch) {
+        medios = mediosMatch[1].trim();
+        medios = medios.replace(/https?:\/\/[^\s]+/g, '').trim();
+        debug(`📻 Medios: "${medios}"`);
+        bloque = bloque.replace(mediosMatch[0], '');
+    } else {
+        const linkIndex = bloque.indexOf('http');
+        if (linkIndex > 0) {
+            const despuesLink = bloque.substring(linkIndex + link.length).trim();
+            if (despuesLink && !despuesLink.includes('TEMA')) {
+                medios = despuesLink;
+                debug(`📻 Medios (detectados): "${medios}"`);
+                bloque = bloque.substring(0, linkIndex);
+            }
+        }
+    }
+    
+    // === PASO 4: Buscar "TEMA:" (título) ===
+    let tituloRaw = bloque;
+    
+    const temaRegex = /TEMA:\s*([^]*?)(?=(?:Resumen:|MEDIOS:|https?:\/\/|$))/i;
+    const temaMatch = bloque.match(temaRegex);
+    if (temaMatch) {
+        tituloRaw = temaMatch[1].trim();
+    }
+    
+    titulo = tituloRaw
+        .replace(/^[^a-zA-Záéíóúüñ]+/, '')
+        .replace(/Resumen:/i, '')
+        .replace(/MEDIOS:/i, '')
+        .replace(/https?:\/\/[^\s]+/g, '')
+        .replace(/^Nota\s+\d+\s*/i, '')
+        .trim();
+    
+    if (titulo.length > 100) {
+        const primerPunto = titulo.indexOf('.');
+        if (primerPunto > 20 && primerPunto < 150) {
+            resumen = titulo.substring(primerPunto + 1).trim() + (resumen ? ' ' + resumen : '');
+            titulo = titulo.substring(0, primerPunto + 1).trim();
+        }
+    }
+    
+    tema = titulo;
+    debug(`📝 Título: "${titulo}"`);
+    
+    if (!titulo && resumen) {
+        titulo = resumen.substring(0, 80);
+        if (titulo.length > 0) titulo = titulo.charAt(0).toUpperCase() + titulo.slice(1);
+        debug(`📝 Título generado desde resumen: "${titulo}"`);
+    }
+    
+    if (!titulo) {
+        titulo = 'Nota sin título';
+        debug(`⚠️ Título por defecto: "${titulo}"`);
+    }
+    
+    // === PASO 5: Distribuir medios en columnas ===
+    const mediosList = medios ? medios.split(/[,;]\s*/).filter(m => m.trim() && !m.match(/^https?:\/\//)) : [];
+    let radio = '', tv = '', digital = '', impresos = '', otros = '';
+    
+    const mediosImpresos = ['universal', 'jornada', 'reforma', 'excelsior', 'grafico', 'milenio', 
+                           'ovaciones', 'contra réplica', 'contrareplica', 'metro', 'el universal',
+                           'la jornada', 'el gráfico', 'el grafico', 'sol de méxico', 'excélsior'];
+    
+    for (const m of mediosList) {
+        const lowerM = m.toLowerCase().trim();
+        if (!lowerM) continue;
+        
+        if (lowerM.includes('radio') || lowerM.includes('fm') || lowerM.includes('am') || lowerM.includes('fórmula')) {
+            radio += (radio ? ', ' : '') + m;
+        } else if (lowerM.includes('tv') || lowerM.includes('televisa') || lowerM.includes('azteca') || lowerM.includes('television') || lowerM.includes('canal')) {
+            tv += (tv ? ', ' : '') + m;
+        } else if (lowerM.includes('digital') || lowerM.includes('portal') || lowerM.includes('web') || lowerM.includes('internet') || lowerM.includes('sitio')) {
+            digital += (digital ? ', ' : '') + m;
+        } else if (mediosImpresos.some(p => lowerM.includes(p))) {
+            impresos += (impresos ? ', ' : '') + m;
+        } else {
+            otros += (otros ? ', ' : '') + m;
+        }
+    }
+    
+    if (mediosList.length > 0 && !radio && !tv && !digital && !impresos) {
+        otros = medios;
+    }
+    
+    if (!tema) {
+        tema = titulo;
+    }
+    
+    return {
+        year: añoActual,
+        month: mesActual,
+        date: fechaStr,
+        title: titulo,
+        relevant: 'No',
+        topic: tema || '',
+        campaign: '',
+        radio: radio || '',
+        tv: tv || '',
+        digital: digital || '',
+        print: impresos || '',
+        others: otros || '',
+        type: 'Informativo',
+        link: link || '',
+        author: '',
+        bulletin: 'NO',
+        summary: resumen || ''
+    };
+}
+
+// ============================================================
+// FILTRAR NOTAS NUEVAS
+// ============================================================
+function filtrarNotasNuevas(notas) {
+    return notas.filter(nota => {
+        return !todasLasNotas.some(bd => {
+            const tituloMatch = bd.title && nota.title && 
+                bd.title.toLowerCase().trim() === nota.title.toLowerCase().trim();
+            const resumenMatch = bd.summary && nota.summary && 
+                bd.summary.toLowerCase().trim().substring(0, 50) === nota.summary.toLowerCase().trim().substring(0, 50);
+            return tituloMatch || resumenMatch;
+        });
+    });
+}
+
+// ============================================================
+// PREVIEW Y TABLA
+// ============================================================
+function mostrarNotasPreview(notas) {
+    if (!notas || notas.length === 0) {
+        extractedTextDisplay.innerHTML = '<span class="text-warning">⚠️ No hay notas nuevas.</span>';
+        return;
+    }
+    let html = `<div class="mb-2"><span class="badge-nota">${notas.length} notas nuevas</span></div>`;
+    notas.forEach((nota, index) => {
+        html += `
+            <div class="nota-card">
+                <div class="titulo">#${index+1} 🟡 ${nota.title || 'Sin título'} <span class="badge-nuevo">NUEVA</span></div>
+                <div class="resumen">🌸 ${nota.summary ? nota.summary.substring(0,100) + (nota.summary.length>100?'...':'') : 'Sin resumen'}</div>
+                ${nota.link ? `<div class="link">🔵 <a href="${nota.link}" target="_blank">${nota.link.substring(0,50)}...</a></div>` : ''}
+                ${nota.print ? `<div class="medios">📰 ${nota.print}</div>` : ''}
+                ${nota.radio ? `<div class="medios">📻 ${nota.radio}</div>` : ''}
+                ${nota.tv ? `<div class="medios">📺 ${nota.tv}</div>` : ''}
+            </div>
+        `;
+    });
+    extractedTextDisplay.innerHTML = html;
+}
+
+function agregarNotasATabla(notas) {
+    if (!notas || notas.length === 0) return;
+    notasNuevas = [...notasNuevas, ...notas];
+    renderizarTabla(notasNuevas);
+}
+
+function renderizarTabla(datos) {
+    if (!datos || datos.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="19" class="text-center py-4">✅ No hay notas nuevas.</td></tr>`;
+        document.getElementById('recordCount').textContent = '0 notas nuevas';
+        nuevasCount.textContent = '0';
+        return;
+    }
+    
+    let html = '';
+    datos.forEach((nota, index) => {
+        const id = `nota_${Date.now()}_${index}_${Math.random().toString(36).substr(2,5)}`;
+        const tituloCorto = nota.title ? nota.title.substring(0, 80) + (nota.title.length > 80 ? '...' : '') : '';
+        const resumenCorto = nota.summary ? nota.summary.substring(0, 80) + (nota.summary.length > 80 ? '...' : '') : '';
+        const linkCorto = nota.link ? nota.link.substring(0, 50) + (nota.link.length > 50 ? '...' : '') : '';
+        
+        html += `
+            <tr id="fila_${id}" class="fila-editando">
+                <td style="text-align:center; font-weight:700; color:var(--guinda);">${index+1}</td>
+                <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.year||'')}" data-field="year" data-id="${id}" placeholder="Año"></td>
+                <td>
+                    <select class="form-select form-select-sm" data-field="month" data-id="${id}">
+                        ${['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'].map(m => 
+                            `<option value="${m}" ${m===nota.month?'selected':''}>${m}</option>`).join('')}
+                    </select>
+                </td>
+                <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.date||'')}" data-field="date" data-id="${id}" placeholder="YYYY-MM-DD"></td>
+                <td>
+                    <input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.title||'')}" data-field="title" data-id="${id}" placeholder="Título" title="${escapeHtml(nota.title||'')}">
+                </td>
+                <td>
+                    <select class="form-select form-select-sm" data-field="relevant" data-id="${id}">
+                        <option value="Si" ${nota.relevant==='Si'?'selected':''}>⭐ Si</option>
+                        <option value="No" ${nota.relevant==='No'?'selected':''}>No</option>
+                    </select>
+                </td>
+                <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.topic||'')}" data-field="topic" data-id="${id}" placeholder="Tema"></td>
+                <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.campaign||'')}" data-field="campaign" data-id="${id}" placeholder="Campaña"></td>
+                <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.radio||'')}" data-field="radio" data-id="${id}" placeholder="Radio"></td>
+                <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.tv||'')}" data-field="tv" data-id="${id}" placeholder="TV"></td>
+                <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.digital||'')}" data-field="digital" data-id="${id}" placeholder="Digital"></td>
+                <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.print||'')}" data-field="print" data-id="${id}" placeholder="Impresos"></td>
+                <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.others||'')}" data-field="others" data-id="${id}" placeholder="Otros"></td>
+                <td>
+                    <select class="form-select form-select-sm" data-field="type" data-id="${id}">
+                        <option value="Informativo" ${nota.type==='Informativo'?'selected':''}>📄 Informativo</option>
+                        <option value="Positivo" ${nota.type==='Positivo'?'selected':''}>✅ Positivo</option>
+                        <option value="Negativo" ${nota.type==='Negativo'?'selected':''}>❌ Negativo</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.link||'')}" data-field="link" data-id="${id}" placeholder="https://..." title="${escapeHtml(nota.link||'')}">
+                </td>
+                <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.author||'')}" data-field="author" data-id="${id}" placeholder="Autor"></td>
+                <td>
+                    <select class="form-select form-select-sm" data-field="bulletin" data-id="${id}">
+                        <option value="NO" ${nota.bulletin==='NO'?'selected':''}>NO</option>
+                        <option value="Sí" ${nota.bulletin==='Sí'?'selected':''}>Sí</option>
+                    </select>
+                </td>
+                <td>
+                    <textarea class="form-control form-control-sm" data-field="summary" data-id="${id}" rows="3" placeholder="Resumen...">${escapeHtml(nota.summary||'')}</textarea>
+                </td>
+                <td>
+                    <button class="btn btn-success btn-sm btn-accion guardar-fila" data-id="${id}" title="Guardar cambios">
+                        <i class="fas fa-check"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm btn-accion eliminar-fila" data-id="${id}" title="Eliminar nota">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+    tableBody.innerHTML = html;
+    document.getElementById('recordCount').textContent = `${datos.length} notas nuevas`;
+    nuevasCount.textContent = datos.length;
+
+    // Event listeners
+    document.querySelectorAll('.guardar-fila').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            guardarFila(id);
+        });
+    });
+    document.querySelectorAll('.eliminar-fila').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            if (confirm('¿Eliminar esta nota?')) eliminarFila(id);
+        });
+    });
+}
+
+function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function guardarFila(id) {
+    const fila = document.getElementById(`fila_${id}`);
+    if (!fila) return;
+    const inputs = fila.querySelectorAll('input, textarea, select');
+    const datos = {};
+    inputs.forEach(input => { datos[input.dataset.field] = input.value; });
+    const index = Array.from(tableBody.children).indexOf(fila);
+    if (notasNuevas[index]) notasNuevas[index] = { ...notasNuevas[index], ...datos };
+    fila.classList.remove('fila-editando');
+    fila.classList.add('fila-guardada');
+    const btn = fila.querySelector('.guardar-fila');
+    if (btn) { btn.innerHTML = '<i class="fas fa-check-circle"></i>'; btn.classList.remove('btn-success'); btn.classList.add('btn-secondary'); btn.disabled = true; }
+    setTimeout(() => { fila.classList.remove('fila-guardada'); }, 2000);
+}
+
+function eliminarFila(id) {
+    const fila = document.getElementById(`fila_${id}`);
+    if (!fila) return;
+    const index = Array.from(tableBody.children).indexOf(fila);
+    if (index > -1) notasNuevas.splice(index, 1);
+    fila.remove();
+    renumerarFilas();
+    document.getElementById('recordCount').textContent = `${notasNuevas.length} notas nuevas`;
+    nuevasCount.textContent = notasNuevas.length;
+}
+
+function renumerarFilas() {
+    const filas = tableBody.querySelectorAll('tr');
+    filas.forEach((tr, i) => { const td = tr.querySelector('td:first-child'); if (td) td.textContent = i + 1; });
+}
+
+addRowBtn.addEventListener('click', function() {
+    const fechaActual = new Date();
+    const mesActual = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][fechaActual.getMonth()];
+    const añoActual = fechaActual.getFullYear().toString();
+    const fechaStr = fechaActual.toISOString().split('T')[0];
+    notasNuevas.push({
+        year: añoActual, month: mesActual, date: fechaStr, title: '', relevant: 'No',
+        topic: '', campaign: '', radio: '', tv: '', digital: '', print: '', others: '',
+        type: 'Informativo', link: '', author: '', bulletin: 'NO', summary: ''
+    });
+    renderizarTabla(notasNuevas);
+});
+
+// ============================================================
+// GUARDAR EN SUPABASE
+// ============================================================
+saveAllBtn.addEventListener('click', async function() {
+    if (notasNuevas.length === 0) { alert('No hay notas nuevas.'); return; }
+    const filas = tableBody.querySelectorAll('tr');
+    const datosParaGuardar = [];
+    filas.forEach((fila) => {
+        const inputs = fila.querySelectorAll('input, textarea, select');
+        const datos = {};
+        inputs.forEach(input => { datos[input.dataset.field] = input.value; });
+        datosParaGuardar.push(datos);
+    });
+    try {
+        const { error } = await supabaseClient.from(TABLE_NAME).insert(datosParaGuardar);
+        if (error) { alert('Error: ' + error.message); return; }
+        alert(`✅ Se guardaron ${datosParaGuardar.length} registros.`);
+        notasNuevas = [];
+        renderizarTabla([]);
+        await cargarDatos();
+    } catch (err) { alert('Error: ' + err.message); }
+});
+
+// ============================================================
+// CARGAR DATOS
+// ============================================================
+async function cargarDatos() {
+    try {
+        const { data, error } = await supabaseClient.from(TABLE_NAME).select('*').order('created_at', { ascending: false });
+        if (error) { console.error(error); return; }
+        todasLasNotas = data || [];
+        totalBDCount.textContent = todasLasNotas.length;
+        actualizarFiltros();
+        aplicarFiltros();
+        actualizarDashboard();
+    } catch (err) { console.error(err); }
+}
+
+// ============================================================
+// FILTROS
+// ============================================================
+function actualizarFiltros() {
+    const años = [...new Set(todasLasNotas.map(d => d.year).filter(Boolean))].sort();
+    filterYear.innerHTML = '<option value="">Todos</option>';
+    años.forEach(a => { filterYear.innerHTML += `<option value="${a}">${a}</option>`; });
+}
+
+function aplicarFiltros() {
+    const year = filterYear.value, month = filterMonth.value, type = filterType.value;
+    const relevant = filterRelevant.value, medium = filterMedium.value;
+    const search = filterSearch.value.toLowerCase().trim();
+
+    datosFiltrados = todasLasNotas.filter(d => {
+        if (year && d.year !== year) return false;
+        if (month && d.month !== month) return false;
+        if (type && d.type !== type) return false;
+        if (relevant && d.relevant !== relevant) return false;
+        if (medium && !d[medium]) return false;
+        if (search) {
+            const title = (d.title || '').toLowerCase();
+            const summary = (d.summary || '').toLowerCase();
+            if (!title.includes(search) && !summary.includes(search)) return false;
+        }
+        return true;
+    });
+
+    mostrarResultados(datosFiltrados);
+    actualizarEstadisticas(datosFiltrados);
+    resultCount.textContent = datosFiltrados.length;
+    filteredCount.textContent = `${datosFiltrados.length} registros`;
+}
+
+function mostrarResultados(datos) {
+    if (!datos || datos.length === 0) {
+        resultsBody.innerHTML = `<tr><td colspan="14" class="text-center">No hay resultados.</td></tr>`;
+        return;
+    }
+    let html = '';
+    datos.forEach((d, i) => {
+        html += `<tr>
+            <td>${i+1}</td><td>${escapeHtml(d.year||'')}</td><td>${escapeHtml(d.month||'')}</td>
+            <td>${escapeHtml(d.date||'')}</td><td><strong>${escapeHtml(d.title||'')}</strong></td>
+            <td>${d.relevant==='Si'?'⭐ Si':'No'}</td><td>${escapeHtml(d.topic||'')}</td>
+            <td>${escapeHtml(d.radio||'')}</td><td>${escapeHtml(d.tv||'')}</td>
+            <td>${escapeHtml(d.digital||'')}</td><td>${escapeHtml(d.print||'')}</td>
+            <td>${escapeHtml(d.others||'')}</td>
+            <td><span class="badge ${d.type==='Positivo'?'bg-success':d.type==='Negativo'?'bg-danger':'bg-secondary'}">${d.type||'Informativo'}</span></td>
+            <td>${escapeHtml((d.summary||'').substring(0,100))}${(d.summary||'').length>100?'...':''}</td>
+        </tr>`;
+    });
+    resultsBody.innerHTML = html;
+}
+
+function actualizarEstadisticas(datos) {
+    statTotal.textContent = datos.length;
+    statPositivo.textContent = datos.filter(d => d.type === 'Positivo').length;
+    statNegativo.textContent = datos.filter(d => d.type === 'Negativo').length;
+    statRelevante.textContent = datos.filter(d => d.relevant === 'Si').length;
+    statImpresos.textContent = datos.filter(d => d.print && d.print.trim().length > 0).length;
+    statMeses.textContent = [...new Set(datos.map(d => d.month).filter(Boolean))].length;
+}
+
+applyFiltersBtn.addEventListener('click', aplicarFiltros);
+clearFiltersBtn.addEventListener('click', function() {
+    filterYear.value = ''; filterMonth.value = ''; filterType.value = '';
+    filterRelevant.value = ''; filterMedium.value = ''; filterSearch.value = '';
+    aplicarFiltros();
+});
+[filterYear, filterMonth, filterType, filterRelevant, filterMedium].forEach(el => {
+    el.addEventListener('change', aplicarFiltros);
+});
+filterSearch.addEventListener('input', aplicarFiltros);
+
+// ============================================================
+// EXPORTAR CSV
+// ============================================================
+exportCsvBtn.addEventListener('click', function() {
+    if (datosFiltrados.length === 0) { alert('No hay datos.'); return; }
+    const headers = ['Año','Mes','Fecha','Título','Relevante','Tema','Campaña','Radio','TV','Digital','Impresos','Otros','Tipo','Link','Autor','Boletín','Resumen'];
+    const rows = datosFiltrados.map(d => [
+        d.year||'', d.month||'', d.date||'', d.title||'', d.relevant||'',
+        d.topic||'', d.campaign||'', d.radio||'', d.tv||'', d.digital||'',
+        d.print||'', d.others||'', d.type||'', d.link||'', d.author||'',
+        d.bulletin||'', (d.summary||'').replace(/,/g,' ')
+    ]);
+    let csv = headers.join(',') + '\n';
+    rows.forEach(row => { csv += row.map(c => `"${c}"`).join(',') + '\n'; });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `notas_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+});
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function actualizarDashboard() {
+    const datos = todasLasNotas;
+    const total = datos.length;
+    dashTotal.textContent = total;
+    dashMeses.textContent = [...new Set(datos.map(d => d.month).filter(Boolean))].length;
+    dashTipos.textContent = [...new Set(datos.map(d => d.type).filter(Boolean))].length;
+    
+    let mediosConDatos = 0;
+    ['radio','tv','digital','print','others'].forEach(m => {
+        if (datos.some(d => d[m] && d[m].trim().length > 0)) mediosConDatos++;
+    });
+    dashMedios.textContent = mediosConDatos;
+
+    // Gráfico: Notas por mes
+    const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    const conteoMeses = meses.map(m => datos.filter(d => d.month === m).length);
+    
+    if (charts.mensual) charts.mensual.destroy();
+    charts.mensual = new Chart(document.getElementById('chartMensual'), {
+        type: 'bar',
+        data: {
+            labels: meses,
+            datasets: [{
+                label: 'Notas',
+                data: conteoMeses,
+                backgroundColor: 'rgba(157, 33, 72, 0.7)',
+                borderColor: '#9D2148',
+                borderWidth: 2,
+                borderRadius: 8,
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } } }
+    });
+
+    // Gráfico: Tipos
+    const tipos = ['Informativo','Positivo','Negativo'];
+    const conteoTipos = tipos.map(t => datos.filter(d => d.type === t).length);
+    const coloresTipos = ['#6c757d', '#78BE20', '#E5074C'];
+    
+    if (charts.tipos) charts.tipos.destroy();
+    charts.tipos = new Chart(document.getElementById('chartTipos'), {
+        type: 'doughnut',
+        data: {
+            labels: tipos,
+            datasets: [{
+                data: conteoTipos,
+                backgroundColor: coloresTipos,
+                borderWidth: 0,
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
+
+    // Gráfico: Relevancia
+    const relevantes = datos.filter(d => d.relevant === 'Si').length;
+    const noRelevantes = datos.filter(d => d.relevant === 'No').length;
+    
+    if (charts.relevancia) charts.relevancia.destroy();
+    charts.relevancia = new Chart(document.getElementById('chartRelevancia'), {
+        type: 'doughnut',
+        data: {
+            labels: ['⭐ Relevantes', 'No relevantes'],
+            datasets: [{
+                data: [relevantes, noRelevantes],
+                backgroundColor: ['#B28E5C', '#94a3b8'],
+                borderWidth: 0,
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
+
+    // Gráfico: Medios
+    const medios = ['radio', 'tv', 'digital', 'print', 'others'];
+    const nombresMedios = ['📻 Radio', '📺 TV', '💻 Digital', '📰 Impresos', '🌐 Otros'];
+    const conteoMedios = medios.map(m => datos.filter(d => d[m] && d[m].trim().length > 0).length);
+    const coloresMedios = ['#8b5cf6', '#3b82f6', '#06b6d4', '#78BE20', '#B28E5C'];
+    
+    if (charts.medios) charts.medios.destroy();
+    charts.medios = new Chart(document.getElementById('chartMedios'), {
+        type: 'bar',
+        data: {
+            labels: nombresMedios,
+            datasets: [{
+                label: 'Notas con cobertura',
+                data: conteoMedios,
+                backgroundColor: coloresMedios,
+                borderColor: coloresMedios.map(c => c),
+                borderWidth: 2,
+                borderRadius: 8,
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } } }
+    });
+
+    // Gráfico: Evolución mensual
+    const años = [...new Set(datos.map(d => d.year).filter(Boolean))].sort();
+    if (años.length > 0) {
+        const datasets = años.map((año, idx) => {
+            const colores = ['#9D2148', '#78BE20', '#266cb4', '#B28E5C', '#E5074C'];
+            const datosAño = meses.map(m => datos.filter(d => d.year === año && d.month === m).length);
+            return {
+                label: año,
+                data: datosAño,
+                borderColor: colores[idx % colores.length],
+                backgroundColor: colores[idx % colores.length] + '33',
+                fill: true,
+                tension: 0.3,
+                pointRadius: 4,
+                pointBackgroundColor: colores[idx % colores.length],
+            };
+        });
+        
+        if (charts.evolucion) charts.evolucion.destroy();
+        charts.evolucion = new Chart(document.getElementById('chartEvolucion'), {
+            type: 'line',
+            data: { labels: meses, datasets: datasets },
+            options: { responsive: true, plugins: { legend: { position: 'top' } } }
+        });
+    }
+}
+
+refreshDashboardBtn.addEventListener('click', function() {
+    cargarDatos();
+});
+
+// ============================================================
+// LIMPIAR
+// ============================================================
+clearPdfBtn.addEventListener('click', function() {
+    pdfFile = null;
+    processPdfBtn.disabled = true;
+    extractedTextDisplay.innerHTML = '<span class="text-muted">📄 Sube un PDF</span>';
+    dropArea.innerHTML = `
+        <i class="fas fa-cloud-upload-alt fa-4x text-primary"></i>
+        <h5 class="mt-3">Arrastra tu PDF aquí</h5>
+        <p class="text-muted">o haz clic para seleccionar</p>
+    `;
+    debugLogs = [];
+    debugContent.textContent = 'Esperando...';
+    rawTextContent.textContent = 'Texto crudo...';
+});
+
+refreshTableBtn.addEventListener('click', function() { cargarDatos(); });
+
+// ============================================================
+// INICIAR
+// ============================================================
+cargarDatos();
+console.log('✅ Sistema RTP cargado con parser mejorado.');
+console.log('📌 Ahora reconoce notas aunque el texto esté pegado.');
+</script>
+</body>
+</html>
