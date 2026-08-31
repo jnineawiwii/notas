@@ -12,8 +12,709 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
-    <!-- CSS propio -->
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ===== TODOS TUS ESTILOS AQUÍ ===== */
+        :root {
+            --guinda: #9D2148;
+            --guinda-light: #f5e6ec;
+            --guinda-soft: #f0e0e6;
+            --dorado: #B28E5C;
+            --dorado-light: #f5ede0;
+            --verde-rtp: #78BE20;
+            --verde-light: #eef5e0;
+            --gris: #55585A;
+            --gris-light: #f0f1f1;
+            --negro: #2D2A26;
+            --blanco: #ffffff;
+            --fondo: #f0f2f6;
+            --card-bg: rgba(255, 255, 255, 0.92);
+            --texto: #2D2A26;
+            --texto-secundario: #55585A;
+            --borde: #e2e8f0;
+            --sombra: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --hover-bg: rgba(157, 33, 72, 0.06);
+            --scrollbar-thumb: linear-gradient(135deg, #9D2148, #B28E5C);
+            --estadistica-primary: #9D2148;
+            --estadistica-success: #78BE20;
+            --estadistica-warning: #B28E5C;
+            --estadistica-danger: #E5074C;
+            --estadistica-info: #266cb4;
+            --nota-card-bg: #FFFDF5;
+            --nota-card-border: #B28E5C;
+            --input-border: #e2e8f0;
+            --input-focus: #9D2148;
+            --upload-bg: #FFFDF5;
+            --upload-border: #B28E5C;
+            --upload-hover-bg: #F5EDE0;
+            --filter-bg: linear-gradient(135deg, #f8fafc, #f1f5f9);
+            --filter-border: #e2e8f0;
+            --tab-inactive: #64748b;
+            --tab-active-bg: #9D2148;
+            --tab-hover-bg: rgba(157, 33, 72, 0.06);
+            --fila-editando: #FFFDF5;
+            --fila-guardada: #eef5e0;
+            --badge-nuevo: #78BE20;
+            --badge-nota: #B28E5C;
+            --progress-bg: #e2e8f0;
+            --progress-fill: linear-gradient(90deg, #9D2148, #B28E5C, #78BE20);
+            --debug-bg: #1e1e2f;
+            --debug-text: #a6e22e;
+            --raw-text-bg: #f8fafc;
+            --text-muted: #64748b;
+            --btn-shadow: rgba(157, 33, 72, 0.3);
+            --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --nav-border: #e2e8f0;
+            --scrollbar-track: #f1f5f9;
+            --metric-bg: #ffffff;
+            --metric-border: #f1f5f9;
+            --chart-bg: #ffffff;
+            --chart-border: #f1f5f9;
+            --stat-bg: #ffffff;
+            --stat-border: #f1f5f9;
+            --btn-primary-bg: #9D2148;
+            --btn-primary-hover: #7A1A3A;
+            --btn-success-bg: #78BE20;
+            --btn-success-hover: #5F9A18;
+            --btn-info-bg: #266cb4;
+            --btn-info-hover: #1A4F8A;
+            --btn-secondary-bg: #55585A;
+            --btn-secondary-hover: #3D3F40;
+            --btn-danger-bg: #E5074C;
+            --btn-danger-hover: #B8053D;
+            --btn-warning-bg: #B28E5C;
+            --btn-warning-hover: #8F6F48;
+        }
+
+        [data-theme="dark"] {
+            --fondo: #1a1a2e;
+            --card-bg: rgba(30, 30, 50, 0.92);
+            --texto: #e8e8e8;
+            --texto-secundario: #b0b0b0;
+            --borde: #3d3d5c;
+            --sombra: 0 8px 30px rgba(0, 0, 0, 0.4);
+            --hover-bg: rgba(157, 33, 72, 0.2);
+            --scrollbar-track: #2d2d44;
+            --estadistica-primary: #D45A8A;
+            --estadistica-success: #8CD44A;
+            --estadistica-warning: #D4B06A;
+            --estadistica-danger: #F5487A;
+            --estadistica-info: #5A8CD4;
+            --nota-card-bg: #252540;
+            --nota-card-border: #B28E5C;
+            --input-border: #3d3d5c;
+            --input-focus: #D45A8A;
+            --upload-bg: #252540;
+            --upload-border: #B28E5C;
+            --upload-hover-bg: #333355;
+            --filter-bg: linear-gradient(135deg, #252540, #1a1a2e);
+            --filter-border: #3d3d5c;
+            --tab-inactive: #8888aa;
+            --tab-active-bg: #9D2148;
+            --tab-hover-bg: rgba(157, 33, 72, 0.2);
+            --fila-editando: #2a2a4a;
+            --fila-guardada: #1a3a2a;
+            --badge-nuevo: #78BE20;
+            --badge-nota: #B28E5C;
+            --progress-bg: #3d3d5c;
+            --progress-fill: linear-gradient(90deg, #D45A8A, #D4B06A, #8CD44A);
+            --debug-bg: #0d0d1a;
+            --debug-text: #a6e22e;
+            --raw-text-bg: #1a1a2e;
+            --text-muted: #8888aa;
+            --btn-shadow: rgba(157, 33, 72, 0.3);
+            --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            --nav-border: #3d3d5c;
+            --scrollbar-track: #2d2d44;
+            --scrollbar-thumb: linear-gradient(135deg, #D45A8A, #D4B06A);
+            --metric-bg: #252540;
+            --metric-border: #3d3d5c;
+            --chart-bg: #252540;
+            --chart-border: #3d3d5c;
+            --stat-bg: #252540;
+            --stat-border: #3d3d5c;
+            --btn-primary-bg: #9D2148;
+            --btn-primary-hover: #7A1A3A;
+            --btn-success-bg: #78BE20;
+            --btn-success-hover: #5F9A18;
+            --btn-info-bg: #266cb4;
+            --btn-info-hover: #1A4F8A;
+            --btn-secondary-bg: #55585A;
+            --btn-secondary-hover: #3D3F40;
+            --btn-danger-bg: #E5074C;
+            --btn-danger-hover: #B8053D;
+            --btn-warning-bg: #B28E5C;
+            --btn-warning-hover: #8F6F48;
+        }
+
+        body {
+            background: var(--fondo);
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            padding: 20px;
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+            color: var(--texto);
+        }
+
+        .card {
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 24px;
+            border: none;
+            backdrop-filter: blur(10px);
+            background: var(--card-bg);
+            transition: transform 0.2s ease, background 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            border-radius: 16px 16px 0 0 !important;
+            font-weight: 700;
+            background: var(--guinda) !important;
+            color: white;
+            padding: 16px 24px;
+            letter-spacing: 0.3px;
+            border-bottom: 3px solid var(--dorado);
+            transition: background 0.3s ease;
+        }
+        .card-header .badge {
+            background: rgba(255, 255, 255, 0.25) !important;
+            color: #fff;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+        }
+
+        .display-4 {
+            font-weight: 800;
+            color: var(--guinda);
+            -webkit-text-fill-color: var(--guinda);
+            letter-spacing: -0.5px;
+            transition: color 0.3s ease;
+        }
+        .display-4 small {
+            -webkit-text-fill-color: var(--texto-secundario);
+            color: var(--texto-secundario);
+            background: none;
+            font-weight: 400;
+            letter-spacing: 0px;
+        }
+
+        .nav-tabs {
+            border-bottom: 3px solid var(--nav-border);
+            gap: 4px;
+            transition: border-color 0.3s ease;
+        }
+        .nav-tabs .nav-link {
+            border: none;
+            border-radius: 30px 30px 0 0;
+            padding: 14px 28px;
+            font-weight: 700;
+            color: var(--tab-inactive);
+            transition: all 0.3s ease;
+            background: transparent;
+            font-size: 0.95rem;
+        }
+        .nav-tabs .nav-link:hover {
+            color: var(--texto);
+            background: var(--tab-hover-bg);
+        }
+        .nav-tabs .nav-link.active {
+            background: var(--tab-active-bg) !important;
+            color: white;
+            box-shadow: 0 4px 20px rgba(157, 33, 72, 0.3);
+        }
+        .nav-tabs .nav-link .badge {
+            margin-left: 8px;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+        }
+        .nav-tabs .nav-link.active .badge {
+            background: rgba(255, 255, 255, 0.25) !important;
+            color: white;
+        }
+
+        .tab-content { padding-top: 15px; }
+
+        .upload-area {
+            border: 3px dashed var(--upload-border);
+            border-radius: 20px;
+            padding: 50px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--upload-bg);
+            color: var(--texto);
+        }
+        .upload-area:hover {
+            background: var(--upload-hover-bg);
+            border-color: var(--guinda);
+            transform: scale(1.01);
+            box-shadow: 0 0 30px rgba(157, 33, 72, 0.15);
+        }
+        .upload-area.dragover {
+            background: var(--upload-hover-bg);
+            border-color: var(--guinda);
+            transform: scale(1.02);
+        }
+        .upload-area i { color: var(--guinda); }
+
+        .table-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--borde);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        .scroll-horizontal {
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 600px;
+            border-radius: 12px;
+            border: 1px solid var(--borde);
+            transition: border-color 0.3s ease;
+            position: relative;
+        }
+
+        .scroll-horizontal::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        .scroll-horizontal::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+            border-radius: 10px;
+        }
+        .scroll-horizontal::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 10px;
+            border: 2px solid var(--scrollbar-track);
+        }
+        .scroll-horizontal::-webkit-scrollbar-thumb:hover {
+            background: var(--guinda);
+        }
+
+        .table-container .table {
+            font-size: 0.85rem;
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            min-width: 1800px;
+        }
+
+        .table-container .table th {
+            background: var(--guinda) !important;
+            color: white;
+            font-weight: 700;
+            padding: 14px 10px;
+            border: none;
+            border-bottom: 3px solid var(--dorado);
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .table-container .table td {
+            padding: 10px 8px;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--borde);
+            background: var(--card-bg);
+        }
+
+        .table-container .table tbody tr:nth-child(even) td {
+            background: rgba(157, 33, 72, 0.03);
+        }
+
+        [data-theme="dark"] .table-container .table tbody tr:nth-child(even) td {
+            background: rgba(157, 33, 72, 0.08);
+        }
+
+        .table-container .table tbody tr:hover td {
+            background: var(--hover-bg) !important;
+        }
+
+        .table-editable input,
+        .table-editable textarea,
+        .table-editable select {
+            width: 100%;
+            border: 2px solid var(--input-border);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 0.8rem;
+            background: var(--blanco);
+            color: var(--texto);
+            transition: all 0.2s ease;
+            min-height: 38px;
+        }
+
+        [data-theme="dark"] .table-editable input,
+        [data-theme="dark"] .table-editable textarea,
+        [data-theme="dark"] .table-editable select {
+            background: #2d2d44;
+            color: #e8e8e8;
+        }
+
+        .table-editable input:focus,
+        .table-editable textarea:focus,
+        .table-editable select:focus {
+            border-color: var(--input-focus);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(157, 33, 72, 0.15);
+        }
+
+        [data-theme="dark"] .table-editable input:focus,
+        [data-theme="dark"] .table-editable textarea:focus,
+        [data-theme="dark"] .table-editable select:focus {
+            background: #333355;
+        }
+
+        .btn-accion {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            border-radius: 30px;
+            margin: 0 3px;
+            min-width: 36px;
+            min-height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease;
+        }
+        .btn-accion:hover {
+            transform: scale(1.08);
+        }
+
+        .table-container .table td:last-child {
+            min-width: 100px;
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .fila-editando td {
+            background: var(--fila-editando) !important;
+            border-left: 4px solid var(--dorado);
+        }
+        .fila-guardada td {
+            background: var(--fila-guardada) !important;
+            border-left: 4px solid var(--verde-rtp);
+        }
+
+        .btn { border-radius: 30px; font-weight: 600; padding: 8px 20px; font-size: 0.85rem; transition: all 0.25s ease; letter-spacing: 0.2px; }
+        .btn-primary { background: var(--btn-primary-bg) !important; border: none; color: white; box-shadow: 0 4px 16px var(--btn-shadow); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px var(--btn-shadow); background: var(--btn-primary-hover) !important; }
+        .btn-success { background: var(--btn-success-bg) !important; border: none; box-shadow: 0 4px 16px rgba(120, 190, 32, 0.3); color: white; }
+        .btn-success:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(120, 190, 32, 0.4); background: var(--btn-success-hover) !important; color: white; }
+        .btn-info { background: var(--btn-info-bg) !important; border: none; color: white; }
+        .btn-info:hover { transform: translateY(-2px); background: var(--btn-info-hover) !important; }
+        .btn-secondary { background: var(--btn-secondary-bg) !important; border: none; color: white; }
+        .btn-secondary:hover { transform: translateY(-2px); background: var(--btn-secondary-hover) !important; }
+        .btn-danger { background: var(--btn-danger-bg) !important; border: none; color: white; }
+        .btn-danger:hover { transform: translateY(-2px); background: var(--btn-danger-hover) !important; }
+        .btn-warning { background: var(--btn-warning-bg) !important; border: none; color: white; }
+        .btn-warning:hover { transform: translateY(-2px); background: var(--btn-warning-hover) !important; }
+
+        .filter-section {
+            background: var(--filter-bg);
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            border: 1px solid var(--filter-border);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .filter-section .form-control, .filter-section .form-select {
+            border-radius: 30px;
+            border: 2px solid var(--input-border);
+            padding: 8px 16px;
+            transition: all 0.2s ease;
+            background: var(--blanco);
+            color: var(--texto);
+        }
+        [data-theme="dark"] .filter-section .form-control,
+        [data-theme="dark"] .filter-section .form-select {
+            background: #2d2d44;
+            color: #e8e8e8;
+        }
+        .filter-section .form-control:focus, .filter-section .form-select:focus {
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 4px rgba(157, 33, 72, 0.12);
+        }
+
+        .stat-card {
+            background: var(--stat-bg);
+            border-radius: 14px;
+            padding: 18px 12px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--stat-border);
+            transition: all 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+        }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); }
+        .stat-card .number { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; }
+        .stat-card .label { color: var(--text-muted); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-card.primary .number { color: var(--estadistica-primary); -webkit-text-fill-color: var(--estadistica-primary); }
+        .stat-card.success .number { color: var(--estadistica-success); -webkit-text-fill-color: var(--estadistica-success); }
+        .stat-card.warning .number { color: var(--estadistica-warning); -webkit-text-fill-color: var(--estadistica-warning); }
+        .stat-card.danger .number { color: var(--estadistica-danger); -webkit-text-fill-color: var(--estadistica-danger); }
+        .stat-card.info .number { color: var(--estadistica-info); -webkit-text-fill-color: var(--estadistica-info); }
+
+        .chart-container {
+            background: var(--chart-bg);
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--chart-border);
+            height: 100%;
+            min-height: 300px;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .chart-container canvas { max-height: 280px; max-width: 100%; }
+
+        .metric-card {
+            background: var(--metric-bg);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--metric-border);
+            transition: all 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+            height: 100%;
+        }
+        .metric-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); }
+        .metric-card .icon { font-size: 2.5rem; margin-bottom: 8px; }
+        .metric-card .value { font-size: 2rem; font-weight: 800; }
+        .metric-card .label { color: var(--text-muted); font-size: 0.85rem; font-weight: 600; }
+
+        .metric-card .value.text-primary { color: var(--estadistica-primary); }
+        .metric-card .value.text-success { color: var(--estadistica-success); }
+        .metric-card .value.text-warning { color: var(--estadistica-warning); }
+        .metric-card .value.text-info { color: var(--estadistica-info); }
+
+        .dashboard-filters {
+            background: var(--filter-bg);
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid var(--filter-border);
+            margin-bottom: 20px;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .dashboard-filters .filter-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+        .dashboard-filters .filter-item {
+            flex: 1;
+            min-width: 150px;
+        }
+        .dashboard-filters .filter-item label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--texto);
+            margin-bottom: 4px;
+            display: block;
+        }
+        .dashboard-filters .filter-item select {
+            width: 100%;
+            border-radius: 30px;
+            border: 2px solid var(--input-border);
+            padding: 8px 16px;
+            background: var(--blanco);
+            color: var(--texto);
+            transition: all 0.2s ease;
+        }
+        [data-theme="dark"] .dashboard-filters .filter-item select {
+            background: #2d2d44;
+            color: #e8e8e8;
+        }
+        .dashboard-filters .filter-item select:focus {
+            border-color: var(--input-focus);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(157, 33, 72, 0.12);
+        }
+        .dashboard-filters .filter-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .extracted-text {
+            background: var(--raw-text-bg);
+            padding: 16px;
+            border-radius: 12px;
+            max-height: 350px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            border: 1px solid var(--borde);
+            color: var(--texto);
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        .nota-card {
+            border-left: 5px solid var(--nota-card-border);
+            padding: 14px 18px;
+            margin-bottom: 12px;
+            background: var(--nota-card-bg);
+            border-radius: 10px;
+            transition: all 0.2s ease, background 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            color: var(--texto);
+        }
+        .nota-card:hover { transform: translateX(4px); box-shadow: 0 4px 16px rgba(178, 142, 92, 0.2); }
+        .nota-card .titulo { font-weight: 700; font-size: 1.05em; color: var(--guinda); transition: color 0.3s ease; }
+        .nota-card .resumen { color: var(--texto-secundario); margin: 6px 0; font-style: italic; font-weight: 400; }
+        .nota-card .link { color: var(--estadistica-info); font-size: 0.85em; font-weight: 500; }
+        .nota-card .medios { color: var(--negro); font-weight: 600; font-size: 0.85em; }
+        [data-theme="dark"] .nota-card .medios { color: #d0d0d0; }
+
+        .progress-bar-custom {
+            height: 8px;
+            background: var(--progress-bg);
+            border-radius: 10px;
+            margin: 14px 0;
+            overflow: hidden;
+            transition: background 0.3s ease;
+        }
+        .progress-bar-custom .fill {
+            height: 100%;
+            background: var(--progress-fill);
+            border-radius: 10px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+            width: 0%;
+        }
+
+        .debug-box {
+            background: var(--debug-bg);
+            color: var(--debug-text);
+            padding: 15px;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin-top: 12px;
+            transition: background 0.3s ease;
+        }
+        .raw-text-box {
+            background: var(--raw-text-bg);
+            padding: 12px;
+            border-radius: 10px;
+            max-height: 150px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            white-space: pre-wrap;
+            border: 1px solid var(--borde);
+            margin-top: 10px;
+            color: var(--texto);
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            background: var(--guinda);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 20px rgba(157, 33, 72, 0.4);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 8px 32px rgba(157, 33, 72, 0.5);
+        }
+
+        .settings-section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px 24px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--borde);
+            margin-bottom: 20px;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .settings-section .settings-title {
+            font-weight: 700;
+            color: var(--guinda);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+        .settings-section .settings-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .settings-section .settings-row .form-label { margin: 0; font-weight: 500; color: var(--texto); }
+        .settings-section .form-check-input {
+            width: 48px;
+            height: 24px;
+            border-radius: 30px;
+            background-color: var(--borde);
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: relative;
+        }
+        .settings-section .form-check-input:checked { background-color: var(--guinda); }
+        .settings-section .form-check-input:focus { box-shadow: 0 0 0 3px rgba(157, 33, 72, 0.25); }
+        .settings-section .form-check-label { color: var(--texto); font-weight: 500; }
+        .settings-section .theme-icon { font-size: 1.2rem; }
+        .settings-section .divider { width: 100%; height: 1px; background: var(--borde); margin: 12px 0; }
+        .settings-section .color-preview { display: flex; gap: 8px; flex-wrap: wrap; }
+        .settings-section .color-dot {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--borde);
+            transition: transform 0.2s ease;
+            cursor: pointer;
+        }
+        .settings-section .color-dot:hover { transform: scale(1.15); }
+        .settings-section .color-label { font-size: 0.75rem; color: var(--texto-secundario); margin-top: 4px; text-align: center; }
+        .settings-section .color-item { display: flex; flex-direction: column; align-items: center; }
+
+        @media (max-width: 1200px) {
+            .table-container .table { font-size: 0.75rem; min-width: 1400px; }
+            .table-container .table th, .table-container .table td { padding: 6px 4px; }
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 12px; }
+            .nav-tabs .nav-link { padding: 10px 16px; font-size: 0.8rem; }
+            .display-4 { font-size: 2rem; }
+            .stat-card .number { font-size: 1.6rem; }
+            .chart-container { min-height: 250px; }
+            .table-container .table { font-size: 0.7rem; min-width: 1200px; }
+            .table-container .table th, .table-container .table td { padding: 4px 3px; }
+            .table-editable input, .table-editable textarea, .table-editable select { font-size: 0.7rem; padding: 4px 6px; min-height: 30px; }
+            .btn-accion { padding: 4px 8px; font-size: 0.7rem; min-width: 30px; min-height: 30px; }
+        }
+    </style>
 </head>
 <body>
     <div class="container-fluid">
@@ -252,7 +953,7 @@
                         <span class="badge">Estadísticas y gráficos</span>
                     </div>
                     <div class="card-body">
-                        <!-- ===== FILTROS DEL DASHBOARD ===== -->
+                        <!-- FILTROS DEL DASHBOARD -->
                         <div class="card mb-4">
                             <div class="card-header" style="background: var(--dorado) !important; border-bottom: 3px solid var(--guinda);">
                                 <i class="fas fa-sliders-h"></i> Filtros del Dashboard
@@ -395,8 +1096,1075 @@
     <!-- BOTÓN MODO OSCURO -->
     <button class="theme-toggle" id="themeToggleBtn" title="Cambiar modo oscuro/claro">🌙</button>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
+    <script>
+        // ============================================================
+        // CONFIGURACIÓN SUPABASE
+        // ============================================================
+        const SUPABASE_URL = 'https://jkkzrljzyncqwaghsnve.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_Ous809GaaSz9WUONNfVglg_MmTNvMeJ';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const TABLE_NAME = 'notas_rtp';
+
+        // ============================================================
+        // VARIABLES GLOBALES
+        // ============================================================
+        let pdfFile = null;
+        let notasNuevas = [];
+        let todasLasNotas = [];
+        let datosFiltrados = [];
+        let datosFiltradosDashboard = [];
+        let debugLogs = [];
+        let charts = {};
+
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        // ============================================================
+        // MODO OSCURO
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            const themeToggle = document.getElementById('themeToggle');
+            
+            const savedTheme = localStorage.getItem('rtp-theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                if (themeToggle) themeToggle.checked = true;
+                themeToggleBtn.textContent = '☀️';
+            }
+            
+            function toggleTheme(isDark) {
+                if (isDark) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('rtp-theme', 'dark');
+                    themeToggleBtn.textContent = '☀️';
+                } else {
+                    document.documentElement.removeAttribute('data-theme');
+                    localStorage.setItem('rtp-theme', 'light');
+                    themeToggleBtn.textContent = '🌙';
+                }
+            }
+            
+            themeToggleBtn.addEventListener('click', function() {
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                toggleTheme(!isDark);
+                if (themeToggle) themeToggle.checked = !isDark;
+            });
+            
+            if (themeToggle) {
+                themeToggle.addEventListener('change', function() {
+                    toggleTheme(this.checked);
+                });
+            }
+        });
+
+        // ============================================================
+        // REFERENCIAS A ELEMENTOS
+        // ============================================================
+        const dropArea = document.getElementById('dropArea');
+        const pdfInput = document.getElementById('pdfInput');
+        const processPdfBtn = document.getElementById('processPdfBtn');
+        const clearPdfBtn = document.getElementById('clearPdfBtn');
+        const extractedTextDisplay = document.getElementById('extractedTextDisplay');
+        const tableBody = document.getElementById('tableBody');
+        const progressBar = document.getElementById('progressBar');
+        const saveAllBtn = document.getElementById('saveAllBtn');
+        const refreshTableBtn = document.getElementById('refreshTableBtn');
+        const addRowBtn = document.getElementById('addRowBtn');
+        const debugContent = document.getElementById('debugContent');
+        const rawTextContent = document.getElementById('rawTextContent');
+
+        const filterYear = document.getElementById('filterYear');
+        const filterMonth = document.getElementById('filterMonth');
+        const filterType = document.getElementById('filterType');
+        const filterRelevant = document.getElementById('filterRelevant');
+        const filterMedium = document.getElementById('filterMedium');
+        const filterSearch = document.getElementById('filterSearch');
+        const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+        const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+        const exportCsvBtn = document.getElementById('exportCsvBtn');
+        const resultsBody = document.getElementById('resultsBody');
+        const resultCount = document.getElementById('resultCount');
+        const filteredCount = document.getElementById('filteredCount');
+        const totalBDCount = document.getElementById('totalBDCount');
+        const nuevasCount = document.getElementById('nuevasCount');
+
+        const statTotal = document.getElementById('statTotal');
+        const statPositivo = document.getElementById('statPositivo');
+        const statNegativo = document.getElementById('statNegativo');
+        const statRelevante = document.getElementById('statRelevante');
+        const statImpresos = document.getElementById('statImpresos');
+        const statMeses = document.getElementById('statMeses');
+
+        const dashTotal = document.getElementById('dashTotal');
+        const dashMeses = document.getElementById('dashMeses');
+        const dashTipos = document.getElementById('dashTipos');
+        const dashMedios = document.getElementById('dashMedios');
+        const refreshDashboardBtn = document.getElementById('refreshDashboardBtn');
+
+        // ============================================================
+        // DRAG & DROP
+        // ============================================================
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, e => { e.preventDefault(); e.stopPropagation(); });
+        });
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => dropArea.classList.add('dragover'));
+        });
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => dropArea.classList.remove('dragover'));
+        });
+        dropArea.addEventListener('drop', function(e) {
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].type === 'application/pdf') {
+                pdfFile = files[0];
+                processPdfBtn.disabled = false;
+                showFileName(files[0].name);
+            }
+        });
+        dropArea.addEventListener('click', () => pdfInput.click());
+        pdfInput.addEventListener('change', function(e) {
+            if (this.files.length > 0) {
+                pdfFile = this.files[0];
+                processPdfBtn.disabled = false;
+                showFileName(this.files[0].name);
+            }
+        });
+        function showFileName(name) {
+            dropArea.innerHTML = `
+                <i class="fas fa-file-pdf fa-4x text-danger"></i>
+                <h5 class="mt-3">📄 ${name}</h5>
+                <p class="text-muted">PDF listo para analizar</p>
+            `;
+        }
+
+        function debug(msg) {
+            debugLogs.push(msg);
+            debugContent.textContent = debugLogs.join('\n');
+            debugContent.scrollTop = debugContent.scrollHeight;
+        }
+
+        // ============================================================
+        // PROCESAR PDF - PARSER MEJORADO
+        // ============================================================
+        processPdfBtn.addEventListener('click', async function() {
+            if (!pdfFile) return;
+            debugLogs = [];
+            debug('=== INICIO DE ANÁLISIS ===');
+            extractedTextDisplay.innerHTML = '<span class="text-primary">⏳ Procesando PDF...</span>';
+            progressBar.style.width = '30%';
+            try {
+                const arrayBuffer = await pdfFile.arrayBuffer();
+                progressBar.style.width = '50%';
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                let textoCompleto = '';
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    const page = await pdf.getPage(i);
+                    const textContent = await page.getTextContent();
+                    const pageText = textContent.items.map(item => item.str).join(' ');
+                    textoCompleto += pageText + '\n';
+                    progressBar.style.width = `${50 + (i / pdf.numPages) * 40}%`;
+                }
+                progressBar.style.width = '90%';
+                rawTextContent.textContent = textoCompleto.substring(0, 2000) + '...';
+                debug('📄 Texto extraído (' + textoCompleto.length + ' caracteres)');
+
+                const notasExtraidas = extraerNotasMejorado(textoCompleto);
+                const notasFiltradas = filtrarNotasNuevas(notasExtraidas);
+                mostrarNotasPreview(notasFiltradas);
+                agregarNotasATabla(notasFiltradas);
+                progressBar.style.width = '100%';
+                setTimeout(() => progressBar.style.width = '0%', 1000);
+                alert(`✅ ${notasExtraidas.length} notas extraídas. ${notasFiltradas.length} son nuevas.`);
+            } catch (error) {
+                alert('Error: ' + error.message);
+                progressBar.style.width = '0%';
+                debug('❌ ERROR: ' + error.message);
+            }
+        });
+
+        // ============================================================
+        // PARSER MEJORADO (VERSIÓN COMPLETA)
+        // ============================================================
+        function extraerNotasMejorado(texto) {
+            const notas = [];
+            const fechaActual = new Date();
+            const mesActual = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][fechaActual.getMonth()];
+            const añoActual = fechaActual.getFullYear().toString();
+            const fechaStr = fechaActual.toISOString().split('T')[0];
+
+            debug('🔍 Buscando notas en el texto (parser ultra)...');
+
+            let text = texto.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+            
+            const partes = text.split(/##\s*TEMA:\s*|TEMA:\s*/i);
+            
+            debug(`📌 Se encontraron ${partes.length - 1} bloques de TEMA:`);
+            
+            for (let i = 1; i < partes.length; i++) {
+                const bloque = partes[i].trim();
+                if (!bloque) continue;
+                debug(`📦 Bloque ${i}: ${bloque.substring(0, 150)}...`);
+                const nota = extraerNotaUltra(bloque, añoActual, mesActual, fechaStr);
+                if (nota) {
+                    notas.push(nota);
+                    debug(`✅ Nota ${i} extraída: "${nota.title}"`);
+                }
+            }
+            
+            if (notas.length === 0) {
+                debug('⚠️ No se encontraron TEMA:, buscando por "Resumen:"...');
+                const partesResumen = text.split(/Resumen:\s*/i);
+                for (let i = 1; i < partesResumen.length; i++) {
+                    const bloque = partesResumen[i].trim();
+                    if (bloque && bloque.length > 20) {
+                        const nota = extraerNotaUltra('TEMA: Nota ' + i + ' ' + bloque, añoActual, mesActual, fechaStr);
+                        if (nota) notas.push(nota);
+                    }
+                }
+            }
+            
+            if (notas.length === 0) {
+                debug('⚠️ Buscando por "MEDIOS:"...');
+                const partesMedios = text.split(/MEDIOS:\s*/i);
+                for (let i = 1; i < partesMedios.length; i++) {
+                    const bloque = partesMedios[i].trim();
+                    if (bloque && bloque.length > 20) {
+                        const nota = extraerNotaUltra('TEMA: Nota ' + i + ' ' + bloque, añoActual, mesActual, fechaStr);
+                        if (nota) notas.push(nota);
+                    }
+                }
+            }
+            
+            debug(`📊 Total notas extraídas: ${notas.length}`);
+            return notas;
+        }
+
+        function extraerNotaUltra(bloque, añoActual, mesActual, fechaStr) {
+            let titulo = '';
+            let resumen = '';
+            let link = '';
+            let medios = '';
+            let tema = '';
+            
+            const resumenRegex = /Resumen:\s*([^]*?)(?=(?:MEDIOS:|TEMA:|https?:\/\/|$))/i;
+            const resumenMatch = bloque.match(resumenRegex);
+            if (resumenMatch) {
+                resumen = resumenMatch[1].trim();
+                resumen = resumen.replace(/^[^a-zA-Záéíóúüñ]+/, '').trim();
+                debug(`📄 Resumen: "${resumen.substring(0, 80)}..."`);
+                bloque = bloque.replace(resumenMatch[0], '');
+            } else {
+                const puntoMayusRegex = /\.\s*([A-ZÁÉÍÓÚÜÑ][^.]*\.)/;
+                const puntoMatch = bloque.match(puntoMayusRegex);
+                if (puntoMatch && !puntoMatch[1].includes('MEDIOS') && !puntoMatch[1].includes('http')) {
+                    resumen = puntoMatch[1].trim();
+                    debug(`📄 Resumen (por punto): "${resumen.substring(0, 80)}..."`);
+                    bloque = bloque.replace(puntoMatch[0], '');
+                }
+            }
+            
+            const linkRegex = /https?:\/\/[^\s]+/;
+            const linkMatch = bloque.match(linkRegex);
+            if (linkMatch) {
+                link = linkMatch[0].trim();
+                debug(`🔗 Link: ${link}`);
+                bloque = bloque.replace(link, '');
+            }
+            
+            const mediosRegex = /MEDIOS:\s*([^]*?)(?=(?:TEMA:|Resumen:|$))/i;
+            const mediosMatch = bloque.match(mediosRegex);
+            if (mediosMatch) {
+                medios = mediosMatch[1].trim();
+                medios = medios.replace(/https?:\/\/[^\s]+/g, '').trim();
+                debug(`📻 Medios: "${medios}"`);
+                bloque = bloque.replace(mediosMatch[0], '');
+            } else {
+                const linkIndex = bloque.indexOf('http');
+                if (linkIndex > 0) {
+                    const despuesLink = bloque.substring(linkIndex + link.length).trim();
+                    if (despuesLink && !despuesLink.includes('TEMA')) {
+                        medios = despuesLink;
+                        debug(`📻 Medios (detectados): "${medios}"`);
+                        bloque = bloque.substring(0, linkIndex);
+                    }
+                }
+            }
+            
+            let tituloRaw = bloque;
+            
+            const temaRegex = /TEMA:\s*([^]*?)(?=(?:Resumen:|MEDIOS:|https?:\/\/|$))/i;
+            const temaMatch = bloque.match(temaRegex);
+            if (temaMatch) {
+                tituloRaw = temaMatch[1].trim();
+            }
+            
+            titulo = tituloRaw
+                .replace(/^[^a-zA-Záéíóúüñ]+/, '')
+                .replace(/Resumen:/i, '')
+                .replace(/MEDIOS:/i, '')
+                .replace(/https?:\/\/[^\s]+/g, '')
+                .replace(/^Nota\s+\d+\s*/i, '')
+                .trim();
+            
+            if (titulo.length > 100) {
+                const primerPunto = titulo.indexOf('.');
+                if (primerPunto > 20 && primerPunto < 150) {
+                    resumen = titulo.substring(primerPunto + 1).trim() + (resumen ? ' ' + resumen : '');
+                    titulo = titulo.substring(0, primerPunto + 1).trim();
+                }
+            }
+            
+            tema = titulo;
+            debug(`📝 Título: "${titulo}"`);
+            
+            if (!titulo && resumen) {
+                titulo = resumen.substring(0, 80);
+                if (titulo.length > 0) titulo = titulo.charAt(0).toUpperCase() + titulo.slice(1);
+                debug(`📝 Título generado desde resumen: "${titulo}"`);
+            }
+            
+            if (!titulo) {
+                titulo = 'Nota sin título';
+                debug(`⚠️ Título por defecto: "${titulo}"`);
+            }
+            
+            const mediosList = medios ? medios.split(/[,;]\s*/).filter(m => m.trim() && !m.match(/^https?:\/\//)) : [];
+            let radio = '', tv = '', digital = '', impresos = '', otros = '';
+            
+            const mediosImpresos = ['universal', 'jornada', 'reforma', 'excelsior', 'grafico', 'milenio', 
+                                   'ovaciones', 'contra réplica', 'contrareplica', 'metro', 'el universal',
+                                   'la jornada', 'el gráfico', 'el grafico', 'sol de méxico', 'excélsior'];
+            
+            for (const m of mediosList) {
+                const lowerM = m.toLowerCase().trim();
+                if (!lowerM) continue;
+                
+                if (lowerM.includes('radio') || lowerM.includes('fm') || lowerM.includes('am') || lowerM.includes('fórmula')) {
+                    radio += (radio ? ', ' : '') + m;
+                } else if (lowerM.includes('tv') || lowerM.includes('televisa') || lowerM.includes('azteca') || lowerM.includes('television') || lowerM.includes('canal')) {
+                    tv += (tv ? ', ' : '') + m;
+                } else if (lowerM.includes('digital') || lowerM.includes('portal') || lowerM.includes('web') || lowerM.includes('internet') || lowerM.includes('sitio')) {
+                    digital += (digital ? ', ' : '') + m;
+                } else if (mediosImpresos.some(p => lowerM.includes(p))) {
+                    impresos += (impresos ? ', ' : '') + m;
+                } else {
+                    otros += (otros ? ', ' : '') + m;
+                }
+            }
+            
+            if (mediosList.length > 0 && !radio && !tv && !digital && !impresos) {
+                otros = medios;
+            }
+            
+            if (!tema) {
+                tema = titulo;
+            }
+            
+            return {
+                year: añoActual,
+                month: mesActual,
+                date: fechaStr,
+                title: titulo,
+                relevant: 'No',
+                topic: tema || '',
+                campaign: '',
+                radio: radio || '',
+                tv: tv || '',
+                digital: digital || '',
+                print: impresos || '',
+                others: otros || '',
+                type: 'Informativo',
+                link: link || '',
+                author: '',
+                bulletin: 'NO',
+                summary: resumen || ''
+            };
+        }
+
+        // ============================================================
+        // FILTRAR NOTAS NUEVAS
+        // ============================================================
+        function filtrarNotasNuevas(notas) {
+            return notas.filter(nota => {
+                return !todasLasNotas.some(bd => {
+                    const tituloMatch = bd.title && nota.title && 
+                        bd.title.toLowerCase().trim() === nota.title.toLowerCase().trim();
+                    const resumenMatch = bd.summary && nota.summary && 
+                        bd.summary.toLowerCase().trim().substring(0, 50) === nota.summary.toLowerCase().trim().substring(0, 50);
+                    return tituloMatch || resumenMatch;
+                });
+            });
+        }
+
+        // ============================================================
+        // PREVIEW Y TABLA
+        // ============================================================
+        function mostrarNotasPreview(notas) {
+            if (!notas || notas.length === 0) {
+                extractedTextDisplay.innerHTML = '<span class="text-warning">⚠️ No hay notas nuevas.</span>';
+                return;
+            }
+            let html = `<div class="mb-2"><span class="badge-nota">${notas.length} notas nuevas</span></div>`;
+            notas.forEach((nota, index) => {
+                html += `
+                    <div class="nota-card">
+                        <div class="titulo">#${index+1} 🟡 ${nota.title || 'Sin título'} <span class="badge-nuevo">NUEVA</span></div>
+                        <div class="resumen">🌸 ${nota.summary ? nota.summary.substring(0,100) + (nota.summary.length>100?'...':'') : 'Sin resumen'}</div>
+                        ${nota.link ? `<div class="link">🔵 <a href="${nota.link}" target="_blank">${nota.link.substring(0,50)}...</a></div>` : ''}
+                        ${nota.print ? `<div class="medios">📰 ${nota.print}</div>` : ''}
+                        ${nota.radio ? `<div class="medios">📻 ${nota.radio}</div>` : ''}
+                        ${nota.tv ? `<div class="medios">📺 ${nota.tv}</div>` : ''}
+                    </div>
+                `;
+            });
+            extractedTextDisplay.innerHTML = html;
+        }
+
+        function agregarNotasATabla(notas) {
+            if (!notas || notas.length === 0) return;
+            notasNuevas = [...notasNuevas, ...notas];
+            renderizarTabla(notasNuevas);
+        }
+
+        function renderizarTabla(datos) {
+            if (!datos || datos.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="19" class="text-center py-4">✅ No hay notas nuevas.</td></tr>`;
+                document.getElementById('recordCount').textContent = '0 notas nuevas';
+                nuevasCount.textContent = '0';
+                return;
+            }
+            
+            let html = '';
+            datos.forEach((nota, index) => {
+                const id = `nota_${Date.now()}_${index}_${Math.random().toString(36).substr(2,5)}`;
+                html += `
+                    <tr id="fila_${id}" class="fila-editando">
+                        <td style="text-align:center; font-weight:700; color:var(--guinda);">${index+1}</td>
+                        <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.year||'')}" data-field="year" data-id="${id}" placeholder="Año"></td>
+                        <td>
+                            <select class="form-select form-select-sm" data-field="month" data-id="${id}">
+                                ${['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'].map(m => 
+                                    `<option value="${m}" ${m===nota.month?'selected':''}>${m}</option>`).join('')}
+                            </select>
+                        </td>
+                        <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.date||'')}" data-field="date" data-id="${id}" placeholder="YYYY-MM-DD"></td>
+                        <td>
+                            <input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.title||'')}" data-field="title" data-id="${id}" placeholder="Título" title="${escapeHtml(nota.title||'')}">
+                        </td>
+                        <td>
+                            <select class="form-select form-select-sm" data-field="relevant" data-id="${id}">
+                                <option value="Si" ${nota.relevant==='Si'?'selected':''}>⭐ Si</option>
+                                <option value="No" ${nota.relevant==='No'?'selected':''}>No</option>
+                            </select>
+                        </td>
+                        <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.topic||'')}" data-field="topic" data-id="${id}" placeholder="Tema"></td>
+                        <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.campaign||'')}" data-field="campaign" data-id="${id}" placeholder="Campaña"></td>
+                        <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.radio||'')}" data-field="radio" data-id="${id}" placeholder="Radio"></td>
+                        <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.tv||'')}" data-field="tv" data-id="${id}" placeholder="TV"></td>
+                        <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.digital||'')}" data-field="digital" data-id="${id}" placeholder="Digital"></td>
+                        <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.print||'')}" data-field="print" data-id="${id}" placeholder="Impresos"></td>
+                        <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.others||'')}" data-field="others" data-id="${id}" placeholder="Otros"></td>
+                        <td>
+                            <select class="form-select form-select-sm" data-field="type" data-id="${id}">
+                                <option value="Informativo" ${nota.type==='Informativo'?'selected':''}>📄 Informativo</option>
+                                <option value="Positivo" ${nota.type==='Positivo'?'selected':''}>✅ Positivo</option>
+                                <option value="Negativo" ${nota.type==='Negativo'?'selected':''}>❌ Negativo</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.link||'')}" data-field="link" data-id="${id}" placeholder="https://..." title="${escapeHtml(nota.link||'')}">
+                        </td>
+                        <td><input type="text" class="form-control form-control-sm" value="${escapeHtml(nota.author||'')}" data-field="author" data-id="${id}" placeholder="Autor"></td>
+                        <td>
+                            <select class="form-select form-select-sm" data-field="bulletin" data-id="${id}">
+                                <option value="NO" ${nota.bulletin==='NO'?'selected':''}>NO</option>
+                                <option value="Sí" ${nota.bulletin==='Sí'?'selected':''}>Sí</option>
+                            </select>
+                        </td>
+                        <td>
+                            <textarea class="form-control form-control-sm" data-field="summary" data-id="${id}" rows="3" placeholder="Resumen...">${escapeHtml(nota.summary||'')}</textarea>
+                        </td>
+                        <td>
+                            <button class="btn btn-success btn-sm btn-accion guardar-fila" data-id="${id}" title="Guardar cambios">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm btn-accion eliminar-fila" data-id="${id}" title="Eliminar nota">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tableBody.innerHTML = html;
+            document.getElementById('recordCount').textContent = `${datos.length} notas nuevas`;
+            nuevasCount.textContent = datos.length;
+
+            document.querySelectorAll('.guardar-fila').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    guardarFila(id);
+                });
+            });
+            document.querySelectorAll('.eliminar-fila').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.dataset.id;
+                    if (confirm('¿Eliminar esta nota?')) eliminarFila(id);
+                });
+            });
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function guardarFila(id) {
+            const fila = document.getElementById(`fila_${id}`);
+            if (!fila) return;
+            const inputs = fila.querySelectorAll('input, textarea, select');
+            const datos = {};
+            inputs.forEach(input => { datos[input.dataset.field] = input.value; });
+            const index = Array.from(tableBody.children).indexOf(fila);
+            if (notasNuevas[index]) notasNuevas[index] = { ...notasNuevas[index], ...datos };
+            fila.classList.remove('fila-editando');
+            fila.classList.add('fila-guardada');
+            const btn = fila.querySelector('.guardar-fila');
+            if (btn) { btn.innerHTML = '<i class="fas fa-check-circle"></i>'; btn.classList.remove('btn-success'); btn.classList.add('btn-secondary'); btn.disabled = true; }
+            setTimeout(() => { fila.classList.remove('fila-guardada'); }, 2000);
+        }
+
+        function eliminarFila(id) {
+            const fila = document.getElementById(`fila_${id}`);
+            if (!fila) return;
+            const index = Array.from(tableBody.children).indexOf(fila);
+            if (index > -1) notasNuevas.splice(index, 1);
+            fila.remove();
+            renumerarFilas();
+            document.getElementById('recordCount').textContent = `${notasNuevas.length} notas nuevas`;
+            nuevasCount.textContent = notasNuevas.length;
+        }
+
+        function renumerarFilas() {
+            const filas = tableBody.querySelectorAll('tr');
+            filas.forEach((tr, i) => { const td = tr.querySelector('td:first-child'); if (td) td.textContent = i + 1; });
+        }
+
+        addRowBtn.addEventListener('click', function() {
+            const fechaActual = new Date();
+            const mesActual = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][fechaActual.getMonth()];
+            const añoActual = fechaActual.getFullYear().toString();
+            const fechaStr = fechaActual.toISOString().split('T')[0];
+            notasNuevas.push({
+                year: añoActual, month: mesActual, date: fechaStr, title: '', relevant: 'No',
+                topic: '', campaign: '', radio: '', tv: '', digital: '', print: '', others: '',
+                type: 'Informativo', link: '', author: '', bulletin: 'NO', summary: ''
+            });
+            renderizarTabla(notasNuevas);
+        });
+
+        // ============================================================
+        // GUARDAR EN SUPABASE
+        // ============================================================
+        saveAllBtn.addEventListener('click', async function() {
+            if (notasNuevas.length === 0) { alert('No hay notas nuevas.'); return; }
+            const filas = tableBody.querySelectorAll('tr');
+            const datosParaGuardar = [];
+            filas.forEach((fila) => {
+                const inputs = fila.querySelectorAll('input, textarea, select');
+                const datos = {};
+                inputs.forEach(input => { datos[input.dataset.field] = input.value; });
+                datosParaGuardar.push(datos);
+            });
+            try {
+                const { error } = await supabaseClient.from(TABLE_NAME).insert(datosParaGuardar);
+                if (error) { alert('Error: ' + error.message); return; }
+                alert(`✅ Se guardaron ${datosParaGuardar.length} registros.`);
+                notasNuevas = [];
+                renderizarTabla([]);
+                await cargarDatos();
+            } catch (err) { alert('Error: ' + err.message); }
+        });
+
+        // ============================================================
+        // CARGAR DATOS
+        // ============================================================
+        async function cargarDatos() {
+            try {
+                const { data, error } = await supabaseClient.from(TABLE_NAME).select('*').order('created_at', { ascending: false });
+                if (error) { console.error(error); return; }
+                todasLasNotas = data || [];
+                totalBDCount.textContent = todasLasNotas.length;
+                actualizarFiltros();
+                actualizarFiltrosDashboard();
+                aplicarFiltros();
+                aplicarFiltrosDashboard();
+            } catch (err) { console.error(err); }
+        }
+
+        // ============================================================
+        // FILTROS DE CONSULTA
+        // ============================================================
+        function actualizarFiltros() {
+            const años = [...new Set(todasLasNotas.map(d => d.year).filter(Boolean))].sort();
+            filterYear.innerHTML = '<option value="">Todos</option>';
+            años.forEach(a => { filterYear.innerHTML += `<option value="${a}">${a}</option>`; });
+        }
+
+        function aplicarFiltros() {
+            const year = filterYear.value, month = filterMonth.value, type = filterType.value;
+            const relevant = filterRelevant.value, medium = filterMedium.value;
+            const search = filterSearch.value.toLowerCase().trim();
+
+            datosFiltrados = todasLasNotas.filter(d => {
+                if (year && d.year !== year) return false;
+                if (month && d.month !== month) return false;
+                if (type && d.type !== type) return false;
+                if (relevant && d.relevant !== relevant) return false;
+                if (medium && !d[medium]) return false;
+                if (search) {
+                    const title = (d.title || '').toLowerCase();
+                    const summary = (d.summary || '').toLowerCase();
+                    if (!title.includes(search) && !summary.includes(search)) return false;
+                }
+                return true;
+            });
+
+            mostrarResultados(datosFiltrados);
+            actualizarEstadisticas(datosFiltrados);
+            resultCount.textContent = datosFiltrados.length;
+            filteredCount.textContent = `${datosFiltrados.length} registros`;
+        }
+
+        function mostrarResultados(datos) {
+            if (!datos || datos.length === 0) {
+                resultsBody.innerHTML = `<tr><td colspan="14" class="text-center">No hay resultados.</td></tr>`;
+                return;
+            }
+            let html = '';
+            datos.forEach((d, i) => {
+                html += `<tr>
+                    <td>${i+1}</td><td>${escapeHtml(d.year||'')}</td><td>${escapeHtml(d.month||'')}</td>
+                    <td>${escapeHtml(d.date||'')}</td><td><strong>${escapeHtml(d.title||'')}</strong></td>
+                    <td>${d.relevant==='Si'?'⭐ Si':'No'}</td><td>${escapeHtml(d.topic||'')}</td>
+                    <td>${escapeHtml(d.radio||'')}</td><td>${escapeHtml(d.tv||'')}</td>
+                    <td>${escapeHtml(d.digital||'')}</td><td>${escapeHtml(d.print||'')}</td>
+                    <td>${escapeHtml(d.others||'')}</td>
+                    <td><span class="badge ${d.type==='Positivo'?'bg-success':d.type==='Negativo'?'bg-danger':'bg-secondary'}">${d.type||'Informativo'}</span></td>
+                    <td>${escapeHtml((d.summary||'').substring(0,100))}${(d.summary||'').length>100?'...':''}</td>
+                </tr>`;
+            });
+            resultsBody.innerHTML = html;
+        }
+
+        function actualizarEstadisticas(datos) {
+            statTotal.textContent = datos.length;
+            statPositivo.textContent = datos.filter(d => d.type === 'Positivo').length;
+            statNegativo.textContent = datos.filter(d => d.type === 'Negativo').length;
+            statRelevante.textContent = datos.filter(d => d.relevant === 'Si').length;
+            statImpresos.textContent = datos.filter(d => d.print && d.print.trim().length > 0).length;
+            statMeses.textContent = [...new Set(datos.map(d => d.month).filter(Boolean))].length;
+        }
+
+        applyFiltersBtn.addEventListener('click', aplicarFiltros);
+        clearFiltersBtn.addEventListener('click', function() {
+            filterYear.value = ''; filterMonth.value = ''; filterType.value = '';
+            filterRelevant.value = ''; filterMedium.value = ''; filterSearch.value = '';
+            aplicarFiltros();
+        });
+        [filterYear, filterMonth, filterType, filterRelevant, filterMedium].forEach(el => {
+            el.addEventListener('change', aplicarFiltros);
+        });
+        filterSearch.addEventListener('input', aplicarFiltros);
+
+        // ============================================================
+        // EXPORTAR CSV
+        // ============================================================
+        exportCsvBtn.addEventListener('click', function() {
+            if (datosFiltrados.length === 0) { alert('No hay datos.'); return; }
+            const headers = ['Año','Mes','Fecha','Título','Relevante','Tema','Campaña','Radio','TV','Digital','Impresos','Otros','Tipo','Link','Autor','Boletín','Resumen'];
+            const rows = datosFiltrados.map(d => [
+                d.year||'', d.month||'', d.date||'', d.title||'', d.relevant||'',
+                d.topic||'', d.campaign||'', d.radio||'', d.tv||'', d.digital||'',
+                d.print||'', d.others||'', d.type||'', d.link||'', d.author||'',
+                d.bulletin||'', (d.summary||'').replace(/,/g,' ')
+            ]);
+            let csv = headers.join(',') + '\n';
+            rows.forEach(row => { csv += row.map(c => `"${c}"`).join(',') + '\n'; });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `notas_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        });
+
+        // ============================================================
+        // DASHBOARD MEJORADO CON FILTROS
+        // ============================================================
+        function actualizarFiltrosDashboard() {
+            const años = [...new Set(todasLasNotas.map(d => d.year).filter(Boolean))].sort();
+            const dashFilterYear = document.getElementById('dashFilterYear');
+            if (dashFilterYear) {
+                dashFilterYear.innerHTML = '<option value="todos">Todos los años</option>';
+                años.forEach(a => {
+                    dashFilterYear.innerHTML += `<option value="${a}">${a}</option>`;
+                });
+            }
+        }
+
+        function aplicarFiltrosDashboard() {
+            const dashFilterYear = document.getElementById('dashFilterYear');
+            const dashFilterMonth = document.getElementById('dashFilterMonth');
+            const dashFilterType = document.getElementById('dashFilterType');
+            const dashFilterRelevant = document.getElementById('dashFilterRelevant');
+            
+            if (!dashFilterYear) return;
+            
+            const año = dashFilterYear.value;
+            const mes = dashFilterMonth.value;
+            const tipo = dashFilterType.value;
+            const relevante = dashFilterRelevant.value;
+            
+            datosFiltradosDashboard = todasLasNotas.filter(d => {
+                if (año !== 'todos' && d.year !== año) return false;
+                if (mes !== 'todos' && d.month !== mes) return false;
+                if (tipo !== 'todos' && d.type !== tipo) return false;
+                if (relevante !== 'todos' && d.relevant !== relevante) return false;
+                return true;
+            });
+            
+            actualizarDashboardConFiltros();
+        }
+
+        function actualizarDashboardConFiltros() {
+            const datos = datosFiltradosDashboard;
+            const total = datos.length;
+            
+            if (dashTotal) dashTotal.textContent = total;
+            if (dashMeses) dashMeses.textContent = [...new Set(datos.map(d => d.month).filter(Boolean))].length;
+            if (dashTipos) dashTipos.textContent = [...new Set(datos.map(d => d.type).filter(Boolean))].length;
+            
+            let mediosConDatos = 0;
+            ['radio','tv','digital','print','others'].forEach(m => {
+                if (datos.some(d => d[m] && d[m].trim().length > 0)) mediosConDatos++;
+            });
+            if (dashMedios) dashMedios.textContent = mediosConDatos;
+
+            const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+            const tipos = ['Informativo', 'Positivo', 'Negativo'];
+            const coloresTipos = {
+                'Informativo': '#6c757d',
+                'Positivo': '#78BE20',
+                'Negativo': '#E5074C'
+            };
+            
+            // Gráfico 1: Notas por mes
+            const datosMensualesPorTipo = tipos.map(tipo => {
+                return meses.map(mes => {
+                    return datos.filter(d => d.month === mes && d.type === tipo).length;
+                });
+            });
+            
+            if (charts.mensual) charts.mensual.destroy();
+            const ctxMensual = document.getElementById('chartMensual');
+            if (ctxMensual) {
+                charts.mensual = new Chart(ctxMensual, {
+                    type: 'bar',
+                    data: {
+                        labels: meses,
+                        datasets: tipos.map((tipo, idx) => ({
+                            label: tipo,
+                            data: datosMensualesPorTipo[idx],
+                            backgroundColor: coloresTipos[tipo] + '99',
+                            borderColor: coloresTipos[tipo],
+                            borderWidth: 2,
+                            borderRadius: 4,
+                            stack: 'stack1',
+                        }))
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top', labels: { usePointStyle: true } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.parsed.y} notas`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { stacked: true },
+                            y: { 
+                                stacked: true,
+                                beginAtZero: true,
+                                ticks: { stepSize: 1 }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Gráfico 2: Distribución por tipo
+            const conteoTipos = tipos.map(t => datos.filter(d => d.type === t).length);
+            const coloresTiposArray = tipos.map(t => coloresTipos[t]);
+            
+            if (charts.tipos) charts.tipos.destroy();
+            const ctxTipos = document.getElementById('chartTipos');
+            if (ctxTipos) {
+                charts.tipos = new Chart(ctxTipos, {
+                    type: 'doughnut',
+                    data: {
+                        labels: tipos.map(t => {
+                            const iconos = {'Informativo': '📄', 'Positivo': '✅', 'Negativo': '❌'};
+                            return `${iconos[t]} ${t}`;
+                        }),
+                        datasets: [{
+                            data: conteoTipos,
+                            backgroundColor: coloresTiposArray,
+                            borderColor: coloresTiposArray.map(c => c),
+                            borderWidth: 2,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = total > 0 ? ((context.parsed / total) * 100).toFixed(1) : 0;
+                                        return `${context.label}: ${context.parsed} notas (${percentage}%)`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Gráfico 3: Relevancia por tipo
+            const relevanciaData = tipos.map(tipo => {
+                const datosTipo = datos.filter(d => d.type === tipo);
+                const relevantes = datosTipo.filter(d => d.relevant === 'Si').length;
+                const noRelevantes = datosTipo.filter(d => d.relevant === 'No').length;
+                return { relevantes, noRelevantes };
+            });
+            
+            if (charts.relevancia) charts.relevancia.destroy();
+            const ctxRelevancia = document.getElementById('chartRelevancia');
+            if (ctxRelevancia) {
+                charts.relevancia = new Chart(ctxRelevancia, {
+                    type: 'bar',
+                    data: {
+                        labels: tipos.map(t => `📄 ${t}`),
+                        datasets: [
+                            {
+                                label: '⭐ Relevantes',
+                                data: relevanciaData.map(d => d.relevantes),
+                                backgroundColor: '#B28E5C',
+                                borderColor: '#B28E5C',
+                                borderWidth: 2,
+                                borderRadius: 4,
+                            },
+                            {
+                                label: 'No relevantes',
+                                data: relevanciaData.map(d => d.noRelevantes),
+                                backgroundColor: '#94a3b8',
+                                borderColor: '#94a3b8',
+                                borderWidth: 2,
+                                borderRadius: 4,
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top', labels: { usePointStyle: true } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.parsed.y} notas`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { stepSize: 1 }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Gráfico 4: Medios de comunicación
+            const medios = ['radio', 'tv', 'digital', 'print', 'others'];
+            const nombresMedios = ['📻 Radio', '📺 TV', '💻 Digital', '📰 Impresos', '🌐 Otros'];
+            
+            const datosPorTipoYMedio = tipos.map(tipo => {
+                const datosTipo = datos.filter(d => d.type === tipo);
+                return medios.map(m => datosTipo.filter(d => d[m] && d[m].trim().length > 0).length);
+            });
+            
+            if (charts.medios) charts.medios.destroy();
+            const ctxMedios = document.getElementById('chartMedios');
+            if (ctxMedios) {
+                charts.medios = new Chart(ctxMedios, {
+                    type: 'bar',
+                    data: {
+                        labels: nombresMedios,
+                        datasets: tipos.map((tipo, idx) => ({
+                            label: tipo,
+                            data: datosPorTipoYMedio[idx],
+                            backgroundColor: coloresTipos[tipo] + '99',
+                            borderColor: coloresTipos[tipo],
+                            borderWidth: 2,
+                            borderRadius: 4,
+                        }))
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top', labels: { usePointStyle: true } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.parsed.y} notas`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { stepSize: 1 }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Gráfico 5: Evolución mensual
+            const coloresEvolucion = {
+                'Informativo': '#6c757d',
+                'Positivo': '#78BE20',
+                'Negativo': '#E5074C'
+            };
+            
+            const dashFilterYear = document.getElementById('dashFilterYear');
+            const añoSeleccionado = dashFilterYear ? dashFilterYear.value : 'todos';
+            
+            let datosEvolucion = [];
+            
+            if (añoSeleccionado !== 'todos') {
+                datosEvolucion = tipos.map(tipo => {
+                    return meses.map(mes => {
+                        return datos.filter(d => d.year === añoSeleccionado && d.month === mes && d.type === tipo).length;
+                    });
+                });
+            } else {
+                datosEvolucion = tipos.map(tipo => {
+                    return meses.map(mes => {
+                        return datos.filter(d => d.month === mes && d.type === tipo).length;
+                    });
+                });
+            }
+            
+            if (charts.evolucion) charts.evolucion.destroy();
+            const ctxEvolucion = document.getElementById('chartEvolucion');
+            if (ctxEvolucion) {
+                charts.evolucion = new Chart(ctxEvolucion, {
+                    type: 'line',
+                    data: {
+                        labels: meses,
+                        datasets: tipos.map((tipo, idx) => ({
+                            label: tipo,
+                            data: datosEvolucion[idx],
+                            borderColor: coloresEvolucion[tipo],
+                            backgroundColor: coloresEvolucion[tipo] + '33',
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 4,
+                            pointBackgroundColor: coloresEvolucion[tipo],
+                            borderWidth: 3,
+                        }))
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top', labels: { usePointStyle: true } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.parsed.y} notas`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { stepSize: 1 }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // ============================================================
+        // EVENTOS DEL DASHBOARD
+        // ============================================================
+        document.getElementById('applyDashFilters').addEventListener('click', aplicarFiltrosDashboard);
+        document.getElementById('resetDashFilters').addEventListener('click', function() {
+            document.getElementById('dashFilterYear').value = 'todos';
+            document.getElementById('dashFilterMonth').value = 'todos';
+            document.getElementById('dashFilterType').value = 'todos';
+            document.getElementById('dashFilterRelevant').value = 'todos';
+            aplicarFiltrosDashboard();
+        });
+        
+        document.getElementById('dashFilterYear').addEventListener('change', aplicarFiltrosDashboard);
+        document.getElementById('dashFilterMonth').addEventListener('change', aplicarFiltrosDashboard);
+        document.getElementById('dashFilterType').addEventListener('change', aplicarFiltrosDashboard);
+        document.getElementById('dashFilterRelevant').addEventListener('change', aplicarFiltrosDashboard);
+
+        // ============================================================
+        // LIMPIAR
+        // ============================================================
+        clearPdfBtn.addEventListener('click', function() {
+            pdfFile = null;
+            processPdfBtn.disabled = true;
+            extractedTextDisplay.innerHTML = '<span class="text-muted">📄 Sube un PDF</span>';
+            dropArea.innerHTML = `
+                <i class="fas fa-cloud-upload-alt fa-4x text-primary"></i>
+                <h5 class="mt-3">Arrastra tu PDF aquí</h5>
+                <p class="text-muted">o haz clic para seleccionar</p>
+            `;
+            debugLogs = [];
+            debugContent.textContent = 'Esperando...';
+            rawTextContent.textContent = 'Texto crudo...';
+        });
+
+        refreshTableBtn.addEventListener('click', function() { cargarDatos(); });
+        refreshDashboardBtn.addEventListener('click', function() { 
+            cargarDatos();
+            setTimeout(() => {
+                aplicarFiltrosDashboard();
+            }, 500);
+        });
+
+        // ============================================================
+        // INICIAR
+        // ============================================================
+        cargarDatos();
+        console.log('✅ Sistema RTP cargado con parser mejorado y dashboard interactivo.');
+    </script>
 </body>
 </html>
