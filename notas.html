@@ -861,59 +861,68 @@
                     <div class="card-body">
                         <div class="filter-section">
                             <div class="row g-3">
-                                <div class="col-md-2">
-                                    <label class="form-label fw-bold"><i class="fas fa-calendar"></i> Año</label>
-                                    <select class="form-select" id="filterYear"><option value="">Todos</option></select>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label fw-bold"><i class="fas fa-calendar-alt"></i> Mes</label>
-                                    <select class="form-select" id="filterMonth">
-                                        <option value="">Todos</option>
-                                        <option value="Enero">Enero</option><option value="Febrero">Febrero</option>
-                                        <option value="Marzo">Marzo</option><option value="Abril">Abril</option>
-                                        <option value="Mayo">Mayo</option><option value="Junio">Junio</option>
-                                        <option value="Julio">Julio</option><option value="Agosto">Agosto</option>
-                                        <option value="Septiembre">Septiembre</option><option value="Octubre">Octubre</option>
-                                        <option value="Noviembre">Noviembre</option><option value="Diciembre">Diciembre</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label fw-bold"><i class="fas fa-tag"></i> Tipo</label>
-                                    <select class="form-select" id="filterType">
-                                        <option value="">Todos</option>
-                                        <option value="Informativo">📄 Informativo</option>
-                                        <option value="Positivo">✅ Positivo</option>
-                                        <option value="Negativo">❌ Negativo</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label fw-bold"><i class="fas fa-check-circle"></i> Relevante</label>
-                                    <select class="form-select" id="filterRelevant">
-                                        <option value="">Todos</option>
-                                        <option value="Si">Si</option><option value="No">No</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label fw-bold"><i class="fas fa-newspaper"></i> Medio</label>
-                                    <select class="form-select" id="filterMedium">
-                                        <option value="">Todos</option>
-                                        <option value="radio">📻 Radio</option>
-                                        <option value="tv">📺 TV</option>
-                                        <option value="digital">💻 Digital</option>
-                                        <option value="print">📰 Impresos</option>
-                                        <option value="others">🌐 Otros</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="form-label fw-bold"><i class="fas fa-search"></i> Buscar</label>
-                                    <input type="text" class="form-control" id="filterSearch" placeholder="Buscar...">
-                                </div>
-                            </div>
+    <div class="col-md-2">
+        <label class="form-label fw-bold"><i class="fas fa-calendar"></i> Año</label>
+        <select class="form-select" id="filterYear"><option value="">Todos</option></select>
+    </div>
+    <div class="col-md-2">
+        <label class="form-label fw-bold"><i class="fas fa-calendar-alt"></i> Mes</label>
+        <select class="form-select" id="filterMonth">
+            <option value="">Todos</option>
+            <option value="Enero">Enero</option><option value="Febrero">Febrero</option>
+            <option value="Marzo">Marzo</option><option value="Abril">Abril</option>
+            <option value="Mayo">Mayo</option><option value="Junio">Junio</option>
+            <option value="Julio">Julio</option><option value="Agosto">Agosto</option>
+            <option value="Septiembre">Septiembre</option><option value="Octubre">Octubre</option>
+            <option value="Noviembre">Noviembre</option><option value="Diciembre">Diciembre</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label class="form-label fw-bold"><i class="fas fa-tag"></i> Tipo</label>
+        <select class="form-select" id="filterType">
+            <option value="">Todos</option>
+            <option value="Informativo">📄 Informativo</option>
+            <option value="Positivo">✅ Positivo</option>
+            <option value="Negativo">❌ Negativo</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label class="form-label fw-bold"><i class="fas fa-check-circle"></i> Relevante</label>
+        <select class="form-select" id="filterRelevant">
+            <option value="">Todos</option>
+            <option value="Si">Si</option><option value="No">No</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label class="form-label fw-bold"><i class="fas fa-newspaper"></i> Medio</label>
+        <select class="form-select" id="filterMedium">
+            <option value="">Todos</option>
+            <option value="radio">📻 Radio</option>
+            <option value="tv">📺 TV</option>
+            <option value="digital">💻 Digital</option>
+            <option value="print">📰 Impresos</option>
+            <option value="others">🌐 Otros</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label class="form-label fw-bold"><i class="fas fa-calendar"></i> Fecha desde</label>
+        <input type="date" class="form-control" id="filterDateFrom">
+    </div>
+    <div class="col-md-2">
+        <label class="form-label fw-bold"><i class="fas fa-calendar"></i> Fecha hasta</label>
+        <input type="date" class="form-control" id="filterDateTo">
+    </div>
+    <div class="col-md-2">
+        <label class="form-label fw-bold"><i class="fas fa-search"></i> Buscar</label>
+        <input type="text" class="form-control" id="filterSearch" placeholder="Buscar...">
+    </div>
+</div>
                             <div class="row mt-3">
                                 <div class="col-12">
                                     <button class="btn btn-primary" id="applyFiltersBtn"><i class="fas fa-filter"></i> Aplicar</button>
                                     <button class="btn btn-secondary" id="clearFiltersBtn"><i class="fas fa-undo"></i> Limpiar</button>
                                     <button class="btn btn-success" id="exportCsvBtn"><i class="fas fa-file-csv"></i> Exportar CSV</button>
+<button class="btn btn-warning" id="copyToClipboardBtn"><i class="fas fa-copy"></i> Copiar para Google Sheets</button>
                                 </div>
                             </div>
                         </div>
@@ -1712,52 +1721,255 @@
             filterYear.innerHTML = '<option value="">Todos</option>';
             años.forEach(a => { filterYear.innerHTML += `<option value="${a}">${a}</option>`; });
         }
+function aplicarFiltros() {
+    const year = filterYear.value;
+    const month = filterMonth.value;
+    const type = filterType.value;
+    const relevant = filterRelevant.value;
+    const medium = filterMedium.value;
+    const search = filterSearch.value.toLowerCase().trim();
+    
+    // ============================================
+    // CONVERTIR FECHAS DEL FILTRO A YYYY-MM-DD
+    // ============================================
+    let dateFrom = filterDateFrom?.value || '';
+    let dateTo = filterDateTo?.value || '';
+    
+    // Si la fecha está en formato DD-MM-YYYY, convertirla a YYYY-MM-DD
+    if (dateFrom && dateFrom.match(/^\d{2}-\d{2}-\d{4}$/)) {
+        const partes = dateFrom.split('-');
+        dateFrom = `${partes[2]}-${partes[1]}-${partes[0]}`; // DD-MM-YYYY → YYYY-MM-DD
+    }
+    if (dateTo && dateTo.match(/^\d{2}-\d{2}-\d{4}$/)) {
+        const partes = dateTo.split('-');
+        dateTo = `${partes[2]}-${partes[1]}-${partes[0]}`; // DD-MM-YYYY → YYYY-MM-DD
+    }
 
-        function aplicarFiltros() {
-            const year = filterYear.value, month = filterMonth.value, type = filterType.value;
-            const relevant = filterRelevant.value, medium = filterMedium.value;
-            const search = filterSearch.value.toLowerCase().trim();
-
-            datosFiltrados = todasLasNotas.filter(d => {
-                if (year && d.year !== year) return false;
-                if (month && d.month !== month) return false;
-                if (type && d.type !== type) return false;
-                if (relevant && d.relevant !== relevant) return false;
-                if (medium && !d[medium]) return false;
-                if (search) {
-                    const title = (d.title || '').toLowerCase();
-                    const summary = (d.summary || '').toLowerCase();
-                    if (!title.includes(search) && !summary.includes(search)) return false;
-                }
-                return true;
-            });
-
-            mostrarResultados(datosFiltrados);
-            actualizarEstadisticas(datosFiltrados);
-            resultCount.textContent = datosFiltrados.length;
-            filteredCount.textContent = `${datosFiltrados.length} registros`;
+    datosFiltrados = todasLasNotas.filter(d => {
+        // Filtros existentes
+        if (year && d.year !== year) return false;
+        if (month && d.month !== month) return false;
+        if (type && d.type !== type) return false;
+        if (relevant && d.relevant !== relevant) return false;
+        if (medium && !d[medium]) return false;
+        
+        // ============================================
+        // FILTRO DE FECHA CON CONVERSIÓN
+        // ============================================
+        // La fecha en la tabla está en YYYY-MM-DD
+        const fechaRegistro = (d.date || '').trim();
+        
+        if (dateFrom && fechaRegistro && fechaRegistro < dateFrom) return false;
+        if (dateTo && fechaRegistro && fechaRegistro > dateTo) return false;
+        
+        // Búsqueda por texto
+        if (search) {
+            const title = (d.title || '').toLowerCase();
+            const summary = (d.summary || '').toLowerCase();
+            const topic = (d.topic || '').toLowerCase();
+            if (!title.includes(search) && !summary.includes(search) && !topic.includes(search)) return false;
         }
+        return true;
+    });
 
+    mostrarResultados(datosFiltrados);
+    actualizarEstadisticas(datosFiltrados);
+    resultCount.textContent = datosFiltrados.length;
+    filteredCount.textContent = `${datosFiltrados.length} registros`;
+}
         function mostrarResultados(datos) {
-            if (!datos || datos.length === 0) {
-                resultsBody.innerHTML = `<tr><td colspan="14" class="text-center">No hay resultados.</td></tr>`;
+    if (!datos || datos.length === 0) {
+        resultsBody.innerHTML = `<tr><td colspan="15" class="text-center">No hay resultados.</td></tr>`;
+        return;
+    }
+    let html = '';
+    datos.forEach((d, i) => {
+        const id = `consulta_${d.id || i}_${Date.now()}_${Math.random().toString(36).substr(2,5)}`;
+        const index = i;
+        html += `<tr id="fila_consulta_${id}" data-index="${index}">
+            <td>${i+1}</td>
+            <td>
+                <span class="view-mode">${escapeHtml(d.year||'')}</span>
+                <input type="text" class="form-control form-control-sm edit-mode" style="display:none;" value="${escapeHtml(d.year||'')}" data-field="year" data-id="${id}">
+            </td>
+            <td>
+                <span class="view-mode">${escapeHtml(d.month||'')}</span>
+                <select class="form-select form-select-sm edit-mode" style="display:none;" data-field="month" data-id="${id}">
+                    ${['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'].map(m => 
+                        `<option value="${m}" ${m===d.month?'selected':''}>${m}</option>`).join('')}
+                </select>
+            </td>
+            <td>
+                <span class="view-mode">${escapeHtml(d.date||'')}</span>
+                <input type="date" class="form-control form-control-sm edit-mode" style="display:none;" value="${escapeHtml(d.date||'')}" data-field="date" data-id="${id}">
+            </td>
+            <td>
+                <span class="view-mode"><strong>${escapeHtml(d.title||'')}</strong></span>
+                <input type="text" class="form-control form-control-sm edit-mode" style="display:none;" value="${escapeHtml(d.title||'')}" data-field="title" data-id="${id}">
+            </td>
+            <td>
+                <span class="view-mode">${d.relevant==='Si'?'⭐ Si':'No'}</span>
+                <select class="form-select form-select-sm edit-mode" style="display:none;" data-field="relevant" data-id="${id}">
+                    <option value="Si" ${d.relevant==='Si'?'selected':''}>⭐ Si</option>
+                    <option value="No" ${d.relevant==='No'?'selected':''}>No</option>
+                </select>
+            </td>
+            <td>
+                <span class="view-mode">${escapeHtml(d.topic||'')}</span>
+                <input type="text" class="form-control form-control-sm edit-mode" style="display:none;" value="${escapeHtml(d.topic||'')}" data-field="topic" data-id="${id}">
+            </td>
+            <td>
+                <span class="view-mode">${escapeHtml(d.radio||'')}</span>
+                <input type="text" class="form-control form-control-sm edit-mode" style="display:none;" value="${escapeHtml(d.radio||'')}" data-field="radio" data-id="${id}">
+            </td>
+            <td>
+                <span class="view-mode">${escapeHtml(d.tv||'')}</span>
+                <input type="text" class="form-control form-control-sm edit-mode" style="display:none;" value="${escapeHtml(d.tv||'')}" data-field="tv" data-id="${id}">
+            </td>
+            <td>
+                <span class="view-mode">${escapeHtml(d.digital||'')}</span>
+                <input type="text" class="form-control form-control-sm edit-mode" style="display:none;" value="${escapeHtml(d.digital||'')}" data-field="digital" data-id="${id}">
+            </td>
+            <td>
+                <span class="view-mode">${escapeHtml(d.print||'')}</span>
+                <input type="text" class="form-control form-control-sm edit-mode" style="display:none;" value="${escapeHtml(d.print||'')}" data-field="print" data-id="${id}">
+            </td>
+            <td>
+                <span class="view-mode">${escapeHtml(d.others||'')}</span>
+                <input type="text" class="form-control form-control-sm edit-mode" style="display:none;" value="${escapeHtml(d.others||'')}" data-field="others" data-id="${id}">
+            </td>
+            <td>
+                <span class="view-mode"><span class="badge ${d.type==='Positivo'?'bg-success':d.type==='Negativo'?'bg-danger':'bg-secondary'}">${d.type||'Informativo'}</span></span>
+                <select class="form-select form-select-sm edit-mode" style="display:none;" data-field="type" data-id="${id}">
+                    <option value="Informativo" ${d.type==='Informativo'?'selected':''}>📄 Informativo</option>
+                    <option value="Positivo" ${d.type==='Positivo'?'selected':''}>✅ Positivo</option>
+                    <option value="Negativo" ${d.type==='Negativo'?'selected':''}>❌ Negativo</option>
+                </select>
+            </td>
+            <td>
+                <span class="view-mode">${escapeHtml((d.summary||'').substring(0,80))}${(d.summary||'').length>80?'...':''}</span>
+                <textarea class="form-control form-control-sm edit-mode" style="display:none;" data-field="summary" data-id="${id}" rows="3">${escapeHtml(d.summary||'')}</textarea>
+            </td>
+            <td style="min-width:120px; white-space:nowrap;">
+                <button class="btn btn-primary btn-sm btn-accion editar-consulta" data-id="${id}" title="Editar">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-success btn-sm btn-accion guardar-consulta" data-id="${id}" style="display:none;" title="Guardar">
+                    <i class="fas fa-save"></i>
+                </button>
+                <button class="btn btn-secondary btn-sm btn-accion cancelar-consulta" data-id="${id}" style="display:none;" title="Cancelar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </td>
+        </tr>`;
+    });
+    resultsBody.innerHTML = html;
+    
+    // ============================================================
+    // EVENTOS PARA EDICIÓN EN CONSULTA
+    // ============================================================
+    
+    // Botón Editar
+    document.querySelectorAll('.editar-consulta').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const fila = document.getElementById(`fila_consulta_${id}`);
+            if (!fila) return;
+            
+            // Ocultar vista y mostrar editores
+            fila.querySelectorAll('.view-mode').forEach(el => el.style.display = 'none');
+            fila.querySelectorAll('.edit-mode').forEach(el => el.style.display = 'block');
+            
+            // Mostrar/ocultar botones
+            fila.querySelector('.editar-consulta').style.display = 'none';
+            fila.querySelector('.guardar-consulta').style.display = 'inline-flex';
+            fila.querySelector('.cancelar-consulta').style.display = 'inline-flex';
+            
+            fila.style.background = 'var(--fila-editando)';
+            fila.style.borderLeft = '4px solid var(--dorado)';
+        });
+    });
+    
+    // Botón Cancelar
+    document.querySelectorAll('.cancelar-consulta').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const fila = document.getElementById(`fila_consulta_${id}`);
+            if (!fila) return;
+            
+            // Restaurar vista
+            fila.querySelectorAll('.view-mode').forEach(el => el.style.display = 'inline');
+            fila.querySelectorAll('.edit-mode').forEach(el => el.style.display = 'none');
+            
+            fila.querySelector('.editar-consulta').style.display = 'inline-flex';
+            fila.querySelector('.guardar-consulta').style.display = 'none';
+            fila.querySelector('.cancelar-consulta').style.display = 'none';
+            
+            fila.style.background = '';
+            fila.style.borderLeft = '';
+        });
+    });
+    
+    // Botón Guardar
+    document.querySelectorAll('.guardar-consulta').forEach(btn => {
+        btn.addEventListener('click', async function() {
+            const id = this.dataset.id;
+            const fila = document.getElementById(`fila_consulta_${id}`);
+            if (!fila) return;
+            
+            // Recoger datos editados
+            const datosEditados = {};
+            fila.querySelectorAll('.edit-mode').forEach(el => {
+                const field = el.dataset.field;
+                if (field) datosEditados[field] = el.value;
+            });
+            
+            // Obtener el ID del registro original
+            const index = parseInt(fila.dataset.index);
+            const registroOriginal = datosFiltrados[index];
+            if (!registroOriginal || !registroOriginal.id) {
+                alert('No se puede actualizar: ID no encontrado');
                 return;
             }
-            let html = '';
-            datos.forEach((d, i) => {
-                html += `<tr>
-                    <td>${i+1}</td><td>${escapeHtml(d.year||'')}</td><td>${escapeHtml(d.month||'')}</td>
-                    <td>${escapeHtml(d.date||'')}</td><td><strong>${escapeHtml(d.title||'')}</strong></td>
-                    <td>${d.relevant==='Si'?'⭐ Si':'No'}</td><td>${escapeHtml(d.topic||'')}</td>
-                    <td>${escapeHtml(d.radio||'')}</td><td>${escapeHtml(d.tv||'')}</td>
-                    <td>${escapeHtml(d.digital||'')}</td><td>${escapeHtml(d.print||'')}</td>
-                    <td>${escapeHtml(d.others||'')}</td>
-                    <td><span class="badge ${d.type==='Positivo'?'bg-success':d.type==='Negativo'?'bg-danger':'bg-secondary'}">${d.type||'Informativo'}</span></td>
-                    <td>${escapeHtml((d.summary||'').substring(0,100))}${(d.summary||'').length>100?'...':''}</td>
-                </tr>`;
-            });
-            resultsBody.innerHTML = html;
-        }
+            
+            try {
+                const { error } = await supabaseClient
+                    .from(TABLE_NAME)
+                    .update(datosEditados)
+                    .eq('id', registroOriginal.id);
+                
+                if (error) {
+                    alert('Error al guardar: ' + error.message);
+                    return;
+                }
+                
+                alert('✅ Registro actualizado correctamente');
+                
+                // Actualizar datos locales
+                Object.assign(registroOriginal, datosEditados);
+                
+                // Salir del modo edición
+                fila.querySelectorAll('.view-mode').forEach(el => el.style.display = 'inline');
+                fila.querySelectorAll('.edit-mode').forEach(el => el.style.display = 'none');
+                fila.querySelector('.editar-consulta').style.display = 'inline-flex';
+                fila.querySelector('.guardar-consulta').style.display = 'none';
+                fila.querySelector('.cancelar-consulta').style.display = 'none';
+                fila.style.background = 'var(--fila-guardada)';
+                fila.style.borderLeft = '4px solid var(--verde-rtp)';
+                setTimeout(() => {
+                    fila.style.background = '';
+                    fila.style.borderLeft = '';
+                }, 2000);
+                
+                // Actualizar vista
+                mostrarResultados(datosFiltrados);
+                
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        });
+    });
+}
 
         function actualizarEstadisticas(datos) {
             statTotal.textContent = datos.length;
@@ -1799,7 +2011,47 @@
             link.download = `notas_${new Date().toISOString().split('T')[0]}.csv`;
             link.click();
         });
-
+// ============================================================
+// COPIAR AL PORTAPAPELES PARA GOOGLE SHEETS
+// ============================================================
+document.getElementById('copyToClipboardBtn').addEventListener('click', function() {
+    if (datosFiltrados.length === 0) {
+        alert('No hay datos para copiar.');
+        return;
+    }
+    
+    // Encabezados
+    const headers = ['Año', 'Mes', 'Fecha', 'Título', 'Relevante', 'Tema', 
+                     'Campaña', 'Radio', 'TV', 'Digital', 'Impresos', 'Otros', 
+                     'Tipo', 'Link', 'Autor', 'Boletín', 'Resumen'];
+    
+    // Construir texto tabulado (funciona perfecto en Google Sheets)
+    let texto = headers.join('\t') + '\n';
+    
+    datosFiltrados.forEach(d => {
+        const fila = [
+            d.year || '', d.month || '', d.date || '', d.title || '', d.relevant || '',
+            d.topic || '', d.campaign || '', d.radio || '', d.tv || '', d.digital || '',
+            d.print || '', d.others || '', d.type || '', d.link || '', d.author || '',
+            d.bulletin || '', (d.summary || '').replace(/\t/g, ' ')
+        ];
+        texto += fila.join('\t') + '\n';
+    });
+    
+    // Copiar al portapapeles
+    navigator.clipboard.writeText(texto).then(() => {
+        alert(`✅ ${datosFiltrados.length} registros copiados al portapapeles.\n\nAbre Google Sheets y pega (Ctrl+V o Cmd+V).`);
+    }).catch(() => {
+        // Fallback para navegadores sin clipboard API
+        const textarea = document.createElement('textarea');
+        textarea.value = texto;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        alert(`✅ ${datosFiltrados.length} registros copiados al portapapeles.\n\nAbre Google Sheets y pega (Ctrl+V o Cmd+V).`);
+    });
+});
         // ============================================================
         // DASHBOARD MEJORADO CON FILTROS
         // ============================================================
