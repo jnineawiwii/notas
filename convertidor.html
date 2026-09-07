@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTP - Convertidor de Notas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        :root {
+            --guinda: #9D2148;
+            --dorado: #B28E5C;
+            --verde-rtp: #78BE20;
+            --fondo: #f0f2f6;
+            --texto: #2D2A26;
+        }
+
+        body {
+            background: var(--fondo);
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            padding: 20px;
+            color: var(--texto);
+        }
+
+        .card {
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            border: none;
+            background: white;
+        }
+
+        .card-header {
+            border-radius: 16px 16px 0 0 !important;
+            font-weight: 700;
+            background: var(--guinda) !important;
+            color: white;
+            padding: 16px 24px;
+            border-bottom: 3px solid var(--dorado);
+        }
+
+        .btn-primary {
+            background: var(--guinda) !important;
+            border: none;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #7A1A3A !important;
+        }
+
+        .btn-success {
+            background: var(--verde-rtp) !important;
+            border: none;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #5F9A18 !important;
+        }
+
+        textarea {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .resultado-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            max-height: 450px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .ejemplo-box {
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 12px;
+            border-left: 4px solid var(--guinda);
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        .copy-btn {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .copy-btn:hover {
+            transform: scale(1.05);
+            color: var(--guinda);
+        }
+
+        .badge-tipo {
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+        .badge-negativo { background: #E5074C; color: white; }
+        .badge-positivo { background: #78BE20; color: white; }
+        .badge-informativo { background: #B28E5C; color: white; }
+
+        .stats-box {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 10px 15px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .stats-box .stat-item {
+            font-size: 0.85rem;
+        }
+        .stats-box .stat-number {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .instruccion-box {
+            background: #e8f4fd;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 0.85rem;
+            border-left: 4px solid #266cb4;
+        }
+
+        .nav-tabs .nav-link {
+            color: var(--texto);
+            font-weight: 600;
+            border: none;
+            border-radius: 30px 30px 0 0;
+            padding: 12px 24px;
+        }
+        .nav-tabs .nav-link.active {
+            background: var(--guinda) !important;
+            color: white !important;
+        }
+        .nav-tabs .nav-link:hover:not(.active) {
+            background: rgba(157, 33, 72, 0.1);
+        }
+        .nav-tabs {
+            border-bottom: 3px solid var(--dorado);
+            gap: 4px;
+        }
+        .tab-pane {
+            padding-top: 20px;
+        }
+
+        .badge-negativo { background: #E5074C; color: white; }
+        .badge-positivo { background: #78BE20; color: white; }
+        .badge-informativo { background: #B28E5C; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="text-center mb-4">
+        <h1 class="display-4" style="color: var(--guinda); font-weight: 800;">
+            <i class="fas fa-exchange-alt"></i> Convertidor de Notas RTP
+            <small class="d-block text-muted fs-6">Convierte tus notas al formato estructurado</small>
+        </h1>
+    </div>
+
+    <!-- TABS -->
+    <ul class="nav nav-tabs nav-fill" id="convertidorTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab-relevantes" data-bs-toggle="tab" data-bs-target="#panel-relevantes" type="button" role="tab">
+                <i class="fas fa-file-alt"></i> Notas Relevantes
+                <span class="badge bg-light text-dark ms-1">Tema: Fecha: Link:</span>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab-movilidad" data-bs-toggle="tab" data-bs-target="#panel-movilidad" type="button" role="tab">
+                <i class="fas fa-bus"></i> Notas de Movilidad
+                <span class="badge bg-light text-dark ms-1">🔴🟢🟡</span>
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="convertidorTabContent">
+
+        <!-- ============================================================ -->
+        <!-- TAB 1: NOTAS RELEVANTES -->
+        <!-- ============================================================ -->
+        <div class="tab-pane fade show active" id="panel-relevantes" role="tabpanel">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-file-import"></i> Datos de entrada
+                            <span class="badge bg-light text-dark float-end">Con etiquetas</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="instruccion-box mb-3">
+                                <i class="fas fa-info-circle text-primary"></i>
+                                <strong>Formato:</strong> <code>Tema:</code> <code>Fecha:</code> <code>Autor:</code> <code>Link:</code> <code>Medios:</code>
+                            </div>
+                            <textarea id="inputRelevantes" class="form-control" rows="10" placeholder="Pega aquí las notas con etiquetas..."></textarea>
+                            <div class="mt-3 d-flex gap-2 flex-wrap">
+                                <button id="convertRelevantesBtn" class="btn btn-primary"><i class="fas fa-magic"></i> Convertir</button>
+                                <button id="clearRelevantesBtn" class="btn btn-secondary"><i class="fas fa-trash"></i> Limpiar</button>
+                                <button id="ejemploRelevantesBtn" class="btn btn-outline-info"><i class="fas fa-paste"></i> Ejemplo</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-file-export"></i> Resultado
+                            <span class="badge bg-light text-dark float-end" id="countRelevantes">0 notas</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted"><i class="fas fa-check-circle text-success"></i> Listo para copiar</span>
+                                <button id="copyRelevantesBtn" class="btn btn-sm btn-success copy-btn">
+                                    <i class="fas fa-copy"></i> Copiar
+                                </button>
+                            </div>
+                            <div id="resultRelevantes" class="resultado-box">
+                                <span class="text-muted">📝 El resultado aparecerá aquí...</span>
+                            </div>
+                            <div class="mt-3 d-flex gap-2 flex-wrap">
+                                <button id="openEditorRelevantesBtn" class="btn btn-outline-primary"><i class="fas fa-edit"></i> Abrir editor</button>
+                                <button id="downloadRelevantesBtn" class="btn btn-outline-success"><i class="fas fa-download"></i> Descargar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- TAB 2: NOTAS DE MOVILIDAD -->
+        <!-- ============================================================ -->
+        <div class="tab-pane fade" id="panel-movilidad" role="tabpanel">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-file-import"></i> Datos de entrada
+                            <span class="badge bg-light text-dark float-end">Con emojis 🔴🟢🟡</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="instruccion-box mb-3">
+                                <i class="fas fa-info-circle text-primary"></i>
+                                <strong>Formato:</strong>
+                                <span class="badge-negativo badge-tipo">🔴 Negativas</span>
+                                <span class="badge-positivo badge-tipo">🟢 Positivas</span>
+                                <span class="badge-informativo badge-tipo">🟡 Informativas</span>
+                                <br>
+                                <code>🔴 Título ... link ... MEDIOS: Medio1, Medio2</code>
+                            </div>
+                            <textarea id="inputMovilidad" class="form-control" rows="10" placeholder="Pega aquí las notas de movilidad..."></textarea>
+                            <div class="mt-3 d-flex gap-2 flex-wrap">
+                                <button id="convertMovilidadBtn" class="btn btn-primary"><i class="fas fa-magic"></i> Convertir</button>
+                                <button id="clearMovilidadBtn" class="btn btn-secondary"><i class="fas fa-trash"></i> Limpiar</button>
+                                <button id="ejemploMovilidadBtn" class="btn btn-outline-info"><i class="fas fa-paste"></i> Ejemplo</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-file-export"></i> Resultado
+                            <span class="badge bg-light text-dark float-end" id="countMovilidad">0 notas</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted"><i class="fas fa-check-circle text-success"></i> Listo para copiar</span>
+                                <button id="copyMovilidadBtn" class="btn btn-sm btn-success copy-btn">
+                                    <i class="fas fa-copy"></i> Copiar
+                                </button>
+                            </div>
+                            <div id="statsMovilidad" class="stats-box mb-3" style="display:none;">
+                                <div class="stat-item"><span class="stat-number" id="statTotalMov">0</span> Total</div>
+                                <div class="stat-item"><span class="stat-number text-danger" id="statNegMov">0</span> 🔴 Negativas</div>
+                                <div class="stat-item"><span class="stat-number text-success" id="statPosMov">0</span> 🟢 Positivas</div>
+                                <div class="stat-item"><span class="stat-number text-warning" id="statInfoMov">0</span> 🟡 Informativas</div>
+                            </div>
+                            <div id="resultMovilidad" class="resultado-box">
+                                <span class="text-muted">📝 El resultado aparecerá aquí...</span>
+                            </div>
+                            <div class="mt-3 d-flex gap-2 flex-wrap">
+                                <button id="openEditorMovilidadBtn" class="btn btn-outline-primary"><i class="fas fa-edit"></i> Abrir editor</button>
+                                <button id="downloadMovilidadBtn" class="btn btn-outline-success"><i class="fas fa-download"></i> Descargar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // ============================================================
+    // FUNCIONES COMPARTIDAS
+    // ============================================================
+    function limpiarTexto(texto) {
+        return texto
+            .replace(/\r\n/g, '\n')
+            .replace(/\r/g, '\n')
+            .replace(/esc uelas/g, 'escuelas')
+            .replace(/estudi antes/g, 'estudiantes')
+            .replace(/vi ew/g, 'view')
+            .replace(/https?:\/\/[^\s]+\s+([^\s]+)/g, (match) => match.replace(/\s+/g, ''));
+    }
+
+    function generarSalida(notas, fechaDefault) {
+        if (!notas || notas.length === 0) return '⚠️ No se encontraron notas.';
+        let resultado = '';
+        const fd = fechaDefault || new Date().toISOString().split('T')[0];
+
+        for (let nota of notas) {
+            const tema = nota.tema || nota.titulo || 'Sin tema';
+            const titulo = nota.titulo || tema;
+            const fecha = nota.fecha || fd;
+            const autor = nota.autor || '';
+            const link = nota.link ? nota.link.replace(/\s+/g, '') : '';
+            const medios = nota.medios || '';
+            const tipo = nota.tipo || 'Informativo';
+            const relevante = nota.relevante || 'No';
+            const boletin = nota.boletin || 'NO';
+            const campana = nota.campana || '';
+            const resumen = nota.resumen || '';
+
+            resultado += `Tema: ${tema}\n`;
+            if (titulo && titulo !== tema) resultado += `Título: ${titulo}\n`;
+            resultado += `Fecha: ${fecha}\n`;
+            if (autor) resultado += `Autor: ${autor}\n`;
+            if (link) resultado += `Link: ${link}\n`;
+            if (medios) resultado += `Medios: ${medios}\n`;
+            if (campana) resultado += `Campaña: ${campana}\n`;
+            if (tipo) resultado += `Tipo: ${tipo}\n`;
+            if (relevante) resultado += `Relevante: ${relevante}\n`;
+            if (boletin) resultado += `Boletín: ${boletin}\n`;
+            if (resumen) resultado += `Resumen: ${resumen}\n`;
+            resultado += '\n';
+        }
+        return resultado;
+    }
+
+    function copiarTexto(texto, btnElement) {
+        if (!texto || texto.includes('El resultado aparecerá aquí') || texto.includes('No se encontraron notas')) {
+            alert('⚠️ No hay texto para copiar. Primero convierte algo.');
+            return;
+        }
+        navigator.clipboard.writeText(texto).then(() => {
+            const original = btnElement.innerHTML;
+            btnElement.innerHTML = '<i class="fas fa-check"></i> ¡Copiado!';
+            setTimeout(() => { btnElement.innerHTML = original; }, 2000);
+        }).catch(() => alert('❌ No se pudo copiar. Selecciona el texto manualmente.'));
+    }
+
+    function descargarTexto(texto, nombre) {
+        if (!texto || texto.includes('El resultado aparecerá aquí') || texto.includes('No se encontraron notas')) {
+            alert('⚠️ No hay texto para descargar. Primero convierte algo.');
+            return;
+        }
+        const blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `${nombre}_${new Date().toISOString().split('T')[0]}.txt`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+    }
+
+    function abrirEditor(texto) {
+        if (!texto || texto.includes('El resultado aparecerá aquí') || texto.includes('No se encontraron notas')) {
+            alert('⚠️ No hay texto para enviar. Primero convierte algo.');
+            return;
+        }
+        localStorage.setItem('texto_convertido', texto);
+        alert('✅ Texto guardado. Abre el editor RTP y pega el contenido.');
+        try {
+            window.location.href = 'notas.html';
+        } catch(e) {
+            window.open('notas.html', '_blank');
+        }
+    }
+
+    // ============================================================
+    // PROCESAR NOTAS RELEVANTES
+    // ============================================================
+    function procesarRelevantes(texto) {
+        const text = limpiarTexto(texto);
+        const lineas = text.split('\n').filter(l => l.trim());
+        let notaActual = {};
+        const notas = [];
+
+        for (let linea of lineas) {
+            const l = linea.trim();
+            if (l.match(/^Tema:/i) && Object.keys(notaActual).length > 0 && (notaActual.tema || notaActual.titulo)) {
+                notas.push({ ...notaActual });
+                notaActual = {};
+            }
+
+            const mTema = l.match(/^Tema:\s*(.+)/i);
+            const mFecha = l.match(/^Fecha:\s*(.+)/i);
+            const mAutor = l.match(/^Autor:\s*(.+)/i);
+            const mLink = l.match(/^Link:\s*(.+)/i);
+            const mMedios = l.match(/^Medios:\s*(.+)/i);
+            const mTitulo = l.match(/^Título:\s*(.+)/i);
+            const mTipo = l.match(/^Tipo:\s*(.+)/i);
+            const mRelevante = l.match(/^Relevante:\s*(.+)/i);
+            const mBoletin = l.match(/^Boletín:\s*(.+)/i);
+            const mCampana = l.match(/^Campaña:\s*(.+)/i);
+            const mResumen = l.match(/^Resumen:\s*(.+)/i);
+
+            if (mTema) notaActual.tema = mTema[1].trim();
+            else if (mFecha) notaActual.fecha = mFecha[1].trim();
+            else if (mAutor) notaActual.autor = mAutor[1].trim();
+            else if (mLink) notaActual.link = mLink[1].trim().replace(/\s+/g, '');
+            else if (mMedios) notaActual.medios = mMedios[1].trim();
+            else if (mTitulo) notaActual.titulo = mTitulo[1].trim();
+            else if (mTipo) notaActual.tipo = mTipo[1].trim();
+            else if (mRelevante) notaActual.relevante = mRelevante[1].trim();
+            else if (mBoletin) notaActual.boletin = mBoletin[1].trim();
+            else if (mCampana) notaActual.campana = mCampana[1].trim();
+            else if (mResumen) notaActual.resumen = mResumen[1].trim();
+            else {
+                if (!l.match(/^(Tema:|Fecha:|Autor:|Link:|Medios:|Título:|Tipo:|Relevante:|Boletín:|Campaña:|Resumen:)/i)) {
+                    notaActual.resumen = notaActual.resumen ? notaActual.resumen + ' ' + l : l;
+                }
+            }
+        }
+        if (Object.keys(notaActual).length > 0 && (notaActual.tema || notaActual.titulo)) {
+            notas.push({ ...notaActual });
+        }
+        return notas;
+    }
+
+    // ============================================================
+    // PROCESAR NOTAS DE MOVILIDAD
+    // ============================================================
+    function procesarMovilidad(texto) {
+        const text = limpiarTexto(texto);
+        const notas = [];
+        const patron = /([🔴🟢🟡])\s*([^🔴🟢🟡]*?)(https?:\/\/[^\s]+)\s*(?:MEDIOS:\s*([^\n]+?))?(?=(?:[🔴🟢🟡]|$))/gi;
+
+        let match;
+        while ((match = patron.exec(text)) !== null) {
+            const emoji = match[1];
+            let titulo = match[2].trim().replace(/[🔴🟢🟡]/g, '').trim();
+            let link = match[3].trim();
+            let medios = match[4] ? match[4].trim() : '';
+
+            let tipo = 'Informativo', relevante = 'No';
+            if (emoji === '🔴') { tipo = 'Negativo';
+                relevante = 'Si'; } else if (emoji === '🟢') { tipo = 'Positivo';
+                relevante = 'Si'; }
+
+            let autor = '';
+            if (medios) {
+                const aMatch = medios.match(/por\s+([^,]+)/i);
+                if (aMatch) { autor = aMatch[1].trim();
+                    medios = medios.replace(/por\s+[^,]+/i, '').trim(); }
+            }
+            medios = medios.replace(/por\s+[^,]+/i, '').trim();
+
+            let tema = 'Movilidad';
+            const tl = titulo.toLowerCase();
+            if (tl.includes('metro')) tema = 'Metro';
+            else if (tl.includes('rtp')) tema = 'RTP';
+            else if (tl.includes('ecobici')) tema = 'Ecobici';
+            else if (tl.includes('scooter') || tl.includes('monopatín')) tema = 'Scooters';
+            else if (tl.includes('taxi')) tema = 'Taxi';
+            else if (tl.includes('ciclovía') || tl.includes('bici') || tl.includes('bikers')) tema = 'Ciclovía';
+            else if (tl.includes('semovi')) tema = 'SEMOVI';
+            else if (tl.includes('gobierno')) tema = 'Gobierno';
+            else if (tl.includes('metrobús') || tl.includes('metrobus')) tema = 'Metrobús';
+
+            let resumen = '';
+            if (titulo.length > 80) {
+                const partes = titulo.split('.');
+                if (partes.length > 1) { titulo = partes[0].trim();
+                    resumen = partes.slice(1).join('.').trim(); }
+            }
+            if (!resumen && titulo.length > 60) { resumen = titulo;
+                titulo = titulo.substring(0, 60) + '...'; }
+
+            notas.push({
+                titulo: titulo,
+                tema: tema,
+                tipo: tipo,
+                relevante: relevante,
+                link: link,
+                medios: medios,
+                autor: autor || '',
+                resumen: resumen || titulo,
+                boletin: 'NO',
+                fecha: new Date().toISOString().split('T')[0]
+            });
+        }
+        return notas;
+    }
+
+    // ============================================================
+    // ACTUALIZAR ESTADÍSTICAS DE MOVILIDAD
+    // ============================================================
+    function actualizarStatsMovilidad(notas) {
+        const stats = document.getElementById('statsMovilidad');
+        if (!notas || notas.length === 0) { stats.style.display = 'none'; return; }
+        let neg = 0,
+            pos = 0,
+            info = 0;
+        notas.forEach(n => { if (n.tipo === 'Negativo') neg++;
+            else if (n.tipo === 'Positivo') pos++;
+            else info++; });
+        document.getElementById('statTotalMov').textContent = notas.length;
+        document.getElementById('statNegMov').textContent = neg;
+        document.getElementById('statPosMov').textContent = pos;
+        document.getElementById('statInfoMov').textContent = info;
+        stats.style.display = 'flex';
+    }
+
+    // ============================================================
+    // EVENTOS - RELEVANTES
+    // ============================================================
+    const inputR = document.getElementById('inputRelevantes');
+    const resultR = document.getElementById('resultRelevantes');
+    const countR = document.getElementById('countRelevantes');
+
+    document.getElementById('convertRelevantesBtn').addEventListener('click', function() {
+        const texto = inputR.value;
+        if (!texto || texto.trim().length < 5) {
+            resultR.innerHTML = '<span class="text-warning">⚠️ Por favor, pega algún texto para convertir.</span>';
+            countR.textContent = '0 notas';
+            return;
+        }
+        const notas = procesarRelevantes(texto);
+        const salida = generarSalida(notas);
+        resultR.textContent = salida;
+        countR.textContent = notas.length + ' notas';
+    });
+
+    document.getElementById('clearRelevantesBtn').addEventListener('click', function() {
+        inputR.value = '';
+        resultR.innerHTML = '<span class="text-muted">📝 El resultado aparecerá aquí...</span>';
+        countR.textContent = '0 notas';
+    });
+
+    document.getElementById('ejemploRelevantesBtn').addEventListener('click', function() {
+        inputR.value = `Tema: Sendero seguro
+Fecha: 2026-09-02
+Autor: Aurelio Sánchez
+Link: https://oem.com.mx/la-prensa/metropoli/camino-seguro-rtp-2026-rutas-costo-y-escuelas-participantes-del-transporte-para-estudiantes-31842895
+Medios: La Prensa
+Resumen: El servicio conecta estaciones del Metro con planteles...
+
+Tema: Senderos Seguro
+Fecha: 2026-09-02
+Autor: Jonna Flores
+Link: https://889noticias.mx/noticias/actualidad/rtp-ofrece-transporte-directo-para-estudiantes/
+Medios: 88.9 noticias
+Resumen: RTP ofrece transporte directo para estudiantes...`;
+        resultR.innerHTML = '<span class="text-muted">📝 Haz clic en "Convertir" para procesar el ejemplo.</span>';
+        countR.textContent = '0 notas';
+    });
+
+    document.getElementById('copyRelevantesBtn').addEventListener('click', function() {
+        copiarTexto(resultR.textContent, this);
+    });
+
+    document.getElementById('downloadRelevantesBtn').addEventListener('click', function() {
+        descargarTexto(resultR.textContent, 'notas_relevantes');
+    });
+
+    document.getElementById('openEditorRelevantesBtn').addEventListener('click', function() {
+        abrirEditor(resultR.textContent);
+    });
+
+    // Ctrl+Enter
+    inputR.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && e.ctrlKey) { e.preventDefault();
+            document.getElementById('convertRelevantesBtn').click(); }
+    });
+
+    // ============================================================
+    // EVENTOS - MOVILIDAD
+    // ============================================================
+    const inputM = document.getElementById('inputMovilidad');
+    const resultM = document.getElementById('resultMovilidad');
+    const countM = document.getElementById('countMovilidad');
+
+    document.getElementById('convertMovilidadBtn').addEventListener('click', function() {
+        const texto = inputM.value;
+        if (!texto || texto.trim().length < 10) {
+            resultM.innerHTML = '<span class="text-warning">⚠️ Por favor, pega algunas notas para convertir.</span>';
+            countM.textContent = '0 notas';
+            document.getElementById('statsMovilidad').style.display = 'none';
+            return;
+        }
+        const notas = procesarMovilidad(texto);
+        const salida = generarSalida(notas);
+        resultM.textContent = salida;
+        countM.textContent = notas.length + ' notas';
+        actualizarStatsMovilidad(notas);
+    });
+
+    document.getElementById('clearMovilidadBtn').addEventListener('click', function() {
+        inputM.value = '';
+        resultM.innerHTML = '<span class="text-muted">📝 El resultado aparecerá aquí...</span>';
+        countM.textContent = '0 notas';
+        document.getElementById('statsMovilidad').style.display = 'none';
+    });
+
+    document.getElementById('ejemploMovilidadBtn').addEventListener('click', function() {
+        inputM.value = `🔴 Una unidad del Metrobús arrolla y mata a mujer Una unidad del Metrobús arrolló y mató a una mujer en la estación Balderas de la Línea 3. https://drive.google.com/file/d/1b1IN1vNCrAXdt8hZuxG-ym2ye-IZw6M4/view MEDIOS: La Prensa, Reforma, Metro, El Gráfico
+🟢 Gobierno CDMX entrega al Congreso el Segundo Informe de Gobierno La jefa de Gobierno, Clara Brugada, acudirá el próximo 14 de octubre al Congreso... https://drive.google.com/file/d/1gwL-GzSbB6OpertSpek-wy5T_40kHv_1/view MEDIOS: La Crónica, La Jornada, Excélsior, Ovaciones
+🟡 La SEMOVI pone fin a la prueba de scooters eléctricos en CDMX La SEMOVI informó que concluyó la extensión de la prueba piloto... https://drive.google.com/file/d/1ypt3kGBsQ-DqZbt0d-Okai2I13U35bZM/view MEDIOS: La Prensa, La Razón, El Universal, El Gráfico`;
+        resultM.innerHTML = '<span class="text-muted">📝 Haz clic en "Convertir" para procesar el ejemplo.</span>';
+        countM.textContent = '0 notas';
+        document.getElementById('statsMovilidad').style.display = 'none';
+    });
+
+    document.getElementById('copyMovilidadBtn').addEventListener('click', function() {
+        copiarTexto(resultM.textContent, this);
+    });
+
+    document.getElementById('downloadMovilidadBtn').addEventListener('click', function() {
+        descargarTexto(resultM.textContent, 'notas_movilidad');
+    });
+
+    document.getElementById('openEditorMovilidadBtn').addEventListener('click', function() {
+        abrirEditor(resultM.textContent);
+    });
+
+    inputM.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && e.ctrlKey) { e.preventDefault();
+            document.getElementById('convertMovilidadBtn').click(); }
+    });
+</script>
+
+</body>
+</html>
